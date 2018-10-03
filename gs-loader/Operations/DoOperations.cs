@@ -1,4 +1,6 @@
-﻿using System;
+﻿using gs_loader.Run;
+using gs_loader.Setup;
+using System;
 using System.IO;
 
 namespace gs_loader.Operations
@@ -27,9 +29,24 @@ Utilização: {exe} [opções]
 
         internal static void Run(string setupFile)
         {
-            //TODO: Verificar se o setupfile é um arquivo existente e executável
+            if (string.IsNullOrEmpty(setupFile))
+                setupFile = Environment.CurrentDirectory;
 
-            Console.WriteLine("RUN: " + setupFile ?? "SEM SETUP");
+            setupFile = SetupData.ParseFileName(setupFile);
+            if (!File.Exists(setupFile))
+            {
+                //TODO: Verificar se o setupfile é um arquivo existente e executável
+                return;
+            }
+            if (!SetupData.Read(setupFile, out SetupData setupData, out string message))
+            {
+                //TODO: Exibir mensagem de erro ao ler o arquivo setup
+                return;
+            }
+            if (!DoRun.Run(setupData, Path.GetDirectoryName(setupFile), out message))
+            {
+                //TODO: Exibir mensagem de erro
+            }
         }
     }
 }

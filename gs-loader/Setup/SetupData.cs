@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json;
 
@@ -11,11 +10,43 @@ namespace gs_loader.Setup
     /// </summary>
     public class SetupData
     {
+        /// <summary>
+        /// Arquivo de setup padrão
+        /// </summary>
         public const string DefaultFileName = "gs-loader.json";
+        /// <summary>
+        /// Extensões padrão para criação de SetupData a partir de diretório ou executável
+        /// </summary>
         public static readonly string[] DefaultExtensions = new string[] { "*.exe", "*.dll" };
+
+        /// <summary>
+        /// Argumentos utilizados na linha de comando do executável
+        /// </summary>
+        public string Arguments { get; set; }
+
+        /// <summary>
+        /// Executável 
+        /// </summary>
         public SetupFile Executable { get; set; }
+
+        /// <summary>
+        /// Arquivos que farão parte do setup
+        /// </summary>
         public List<SetupFile> Files { get; set; } = new List<SetupFile>();
 
+        /// <summary>
+        /// Indica que somente uma instância pode ser executada por vez
+        /// </summary>
+        public bool JustOneInstance { get; set; }
+
+        /// <summary>
+        /// Cria uma instância de setup a partir de um executável ou pasta
+        /// </summary>
+        /// <param name="executableFile"></param>
+        /// <param name="setupData"></param>
+        /// <param name="message"></param>
+        /// <param name="files"></param>
+        /// <returns></returns>
         public static bool Create(string executableFile, out SetupData setupData, out string message, string[] files = null)
         {
             if (files == null)
@@ -52,8 +83,7 @@ namespace gs_loader.Setup
             {
                 message = "Executável inexistente em " + executableFile;
                 return false;
-            }
-            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(executableFile);
+            }            
             string path = Path.GetDirectoryName(executableFile);
             setupData = new SetupData
             {
@@ -71,6 +101,21 @@ namespace gs_loader.Setup
 
             message = "OK";
             return true;
+        }
+
+        /// <summary>
+        /// Trata o nome do arquivo caso for informado apenas a pasta
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static string ParseFileName(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                return "";
+            fileName = Path.GetFullPath(fileName);
+            if (Directory.Exists(fileName))
+                fileName = Path.Combine(fileName, DefaultFileName);
+            return fileName;
         }
 
         /// <summary>
@@ -143,21 +188,6 @@ namespace gs_loader.Setup
                 message = e.Message;
                 return false;
             }
-        }
-
-        /// <summary>
-        /// Trata o nome do arquivo caso for informado apenas a pasta
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        private static string ParseFileName(string fileName)
-        {
-            if (string.IsNullOrEmpty(fileName))
-                return "";
-            fileName = Path.GetFullPath(fileName);
-            if (Directory.Exists(fileName))
-                fileName = Path.Combine(fileName, DefaultFileName);
-            return fileName;
         }
     }
 }
