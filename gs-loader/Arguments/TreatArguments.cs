@@ -3,6 +3,7 @@ using NDesk.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Forms;
 
 namespace gs_loader.Arguments
 {
@@ -14,26 +15,28 @@ namespace gs_loader.Arguments
                 {
                     Operation=TypeOperation.Help;
                 } },
-            {"s|setup", "Criar/alterar arquivo de configuração", v =>
+            {"s|setup:", "Criar/alterar arquivo de configuração", v =>
             {
                 Operation = TypeOperation.Setup;
+                SetupFile = v;
             } },
-            {"r|run:","Executar sistema a partir do arquivo de configuração",
-                v =>
-                {
-                    Operation = TypeOperation.Run;
-                    SetupFile = v;
-                } }
+            {"r|run:","Executar sistema a partir do arquivo de configuração", v =>
+            {
+                Operation = TypeOperation.Run;
+                SetupFile = v;
+            } }
         };
 
         public static TypeOperation Operation { get; private set; }
         public static string SetupFile { get; private set; }
+        public static Form OperationForm = null;
+
         /// <summary>
         /// Tratar os parâmetros da linha de comando
         /// </summary>
         /// <param name="args"></param>
         public static void Parse(params string[] args)
-        {            
+        {
             List<string> extra;
             try
             {
@@ -48,9 +51,9 @@ namespace gs_loader.Arguments
             }
 
             switch (Operation)
-            {                
+            {
                 case TypeOperation.Setup:
-                    DoOperations.Setup();
+                    OperationForm=DoOperations.Setup(SetupFile);
                     break;
                 case TypeOperation.Run:
                     DoOperations.Run(SetupFile);
@@ -58,11 +61,11 @@ namespace gs_loader.Arguments
                 default:
                     StringWriter m = new StringWriter();
                     Options.WriteOptionDescriptions(m);
-                    DoOperations.ShowHelp(m.ToString());
+                   OperationForm= DoOperations.ShowHelp(m.ToString());
                     break;
             }
 
-   
+
         }
 
     }

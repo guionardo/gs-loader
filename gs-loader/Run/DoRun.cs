@@ -1,4 +1,5 @@
-﻿using gs_loader.Setup;
+﻿using gs_loader.Forms;
+using gs_loader.Setup;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -13,7 +14,7 @@ namespace gs_loader.Run
         const string USER32 = "USER32.DLL";
         static Process currentProcess = null;
 
-        public static bool Run(SetupData setupData, string folder, out string message)
+        public static bool Run(SetupData setupData, string folder, out string message, Action<UpdateIconType,object> updateNotify)
         {
             currentProcess = null;
             Directory.SetCurrentDirectory(folder);
@@ -28,7 +29,7 @@ namespace gs_loader.Run
                 message = "Instância já em execução";
                 return false;
             }
-            currentProcess = new Process();            
+            currentProcess = new Process();
             currentProcess.StartInfo.FileName = setupData.Executable.File;
             if (!string.IsNullOrEmpty(setupData.Arguments))
                 currentProcess.StartInfo.Arguments = setupData.Arguments;
@@ -91,7 +92,7 @@ namespace gs_loader.Run
 
         [DllImport(USER32)]
         static extern bool IsIconic(IntPtr handle);
-      
+
         [DllImport(USER32)]
         static extern bool SetForegroundWindow(IntPtr hWnd);
         [DllImport(USER32)]

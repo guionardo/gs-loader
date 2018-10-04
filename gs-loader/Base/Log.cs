@@ -18,7 +18,6 @@ namespace gs_loader.Base
 
         const string LogPrefix = "GS-LOADER";
         static readonly string LogPath;
-        static string _detalheLog = "";
 
         static Log()
         {
@@ -33,11 +32,6 @@ namespace gs_loader.Base
             LogPath = Path.Combine(LogPath, "LOG");
             IO.MakeFolder(LogPath);
         }
-
-        /// <summary>
-        /// Texto que é escrito no cabeçalho de cada arquivo de log, após a descrição
-        /// </summary>
-        public static string DetalheLog { get { return _detalheLog; } set { _detalheLog = value ?? ""; } }
 
         /// <summary>
         /// Adiciona linha ao arquivo de log
@@ -56,8 +50,6 @@ namespace gs_loader.Base
                     if (NovoArquivo)
                     {
                         f.WriteLine("*** LOG  ***");
-                        if (!string.IsNullOrEmpty(DetalheLog))
-                            f.WriteLine("*** " + DetalheLog);
                         f.WriteLine("*** Padrão HHMMSS.fff");
                         f.WriteLine("*** Início do LOG ***");
                     }

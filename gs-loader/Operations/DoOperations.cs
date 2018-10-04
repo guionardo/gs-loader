@@ -1,33 +1,36 @@
-﻿using gs_loader.Run;
+﻿using gs_loader.Base;
+using gs_loader.Forms;
+using gs_loader.Run;
 using gs_loader.Setup;
 using System;
 using System.IO;
+using System.Windows.Forms;
 
 namespace gs_loader.Operations
 {
     public static class DoOperations
     {
-        public static void ShowHelp(string content)
+        public static Form ShowHelp(string content)
         {
             string exe = "null"; // Path.GetFileName(System.Reflection.Assembly.GetEntryAssembly().Location);
-            Console.WriteLine($@"
-Aplicação de transmissão e consulta de dados do BlocoX - PAF/ECF - SC
-Time Informática Ltda
+            content = $@"
+Aplicação de carregamento e atualização de sistemas
+Guiosoft Informática
 
 Utilização: {exe} [opções]
 
-");
-            Console.WriteLine(content);
-            //TODO: Apresentar o Help           
+" + (content ?? "");
+
+            return new HelpForm(content);
+
+            //TODO: Apresentar o Help
 
         }
 
-        internal static void Setup()
-        {
-            throw new NotImplementedException();
-        }
+        internal static Form Setup(string setupFile) => new SetupForm(setupFile);
 
-        internal static void Run(string setupFile)
+
+        internal static Form Run(string setupFile)
         {
             if (string.IsNullOrEmpty(setupFile))
                 setupFile = Environment.CurrentDirectory;
@@ -35,18 +38,19 @@ Utilização: {exe} [opções]
             setupFile = SetupData.ParseFileName(setupFile);
             if (!File.Exists(setupFile))
             {
-                //TODO: Verificar se o setupfile é um arquivo existente e executável
-                return;
+                Communication.Send("Arquivo de setup inexistente: " + setupFile);
+                return null;
             }
             if (!SetupData.Read(setupFile, out SetupData setupData, out string message))
             {
-                //TODO: Exibir mensagem de erro ao ler o arquivo setup
-                return;
+                //DONE: Run: Exibir mensagem de erro ao ler o arquivo setup
+                Communication.Send("Erro na leitura do arquivo de setup: " + message, true);
+                return null;
             }
-            if (!DoRun.Run(setupData, Path.GetDirectoryName(setupFile), out message))
-            {
-                //TODO: Exibir mensagem de erro
-            }
+            return new RunningForm(setupData, Path.GetDirectoryName(setupFile));
+
+            //TODO: Run: Exibir mensagem de erro
+
         }
     }
 }

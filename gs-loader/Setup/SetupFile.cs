@@ -1,4 +1,5 @@
-﻿using System;
+﻿using gs_loader.Base;
+using System;
 using System.Diagnostics;
 using System.IO;
 
@@ -36,12 +37,7 @@ namespace gs_loader.Setup
                 Size = fi.Length;
 
                 CreationTime = System.IO.File.GetCreationTime(fileName);
-                var md5 = System.Security.Cryptography.MD5.Create();
-                var bytesMD5 = md5.ComputeHash(System.IO.File.ReadAllBytes(fileName));
-                string hashMD5 = "";
-                foreach (var b in bytesMD5)
-                    hashMD5 += b.ToString("X2");
-                MD5 = hashMD5.ToLower();
+                MD5 = IO.MD5(fileName);
 
                 if (string.IsNullOrEmpty(baseFolder))
                     baseFolder = Path.GetDirectoryName(fileName);

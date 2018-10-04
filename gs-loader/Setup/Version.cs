@@ -6,7 +6,7 @@ namespace gs_loader.Setup
     {
         public Version(string version)
         {
-            var v = (version ?? "").Split('.');
+            var v = ((version ?? "")+"0.0.0.0").Split('.');
             Major = int.TryParse(v.Length > 0 ? v[0] : "0", out int n) ? n : 0;
             Minor = int.TryParse(v.Length > 1 ? v[1] : "0", out n) ? n : 0;
             Build = int.TryParse(v.Length > 2 ? v[2] : "0", out n) ? n : 0;
@@ -45,7 +45,7 @@ namespace gs_loader.Setup
 
         public override bool Equals(object obj) => CompareTo(obj) == 0;
         public override int GetHashCode() => ToString().GetHashCode();
-
         public override string ToString() => string.Format("{0}.{1}.{2}.{3}", Major, Minor, Build, Revision);
+
     }
 }

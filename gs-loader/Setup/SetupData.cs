@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using gs_loader.Update;
 using Newtonsoft.Json;
 
 namespace gs_loader.Setup
@@ -38,6 +39,13 @@ namespace gs_loader.Setup
         /// Indica que somente uma instância pode ser executada por vez
         /// </summary>
         public bool JustOneInstance { get; set; }
+
+        /// <summary>
+        /// Fonte de atualização
+        /// </summary>
+        public UpdateSource UpdateSource { get; set; }
+
+        public UpdateType UpdateType { get; set; }
 
         /// <summary>
         /// Cria uma instância de setup a partir de um executável ou pasta
@@ -83,7 +91,7 @@ namespace gs_loader.Setup
             {
                 message = "Executável inexistente em " + executableFile;
                 return false;
-            }            
+            }
             string path = Path.GetDirectoryName(executableFile);
             setupData = new SetupData
             {

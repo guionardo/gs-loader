@@ -1,7 +1,9 @@
 ﻿using System;
 using gs_loader.Arguments;
+using gs_loader.Base;
 using gs_loader.Run;
 using gs_loader.Setup;
+using gs_loader.Update;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Testes
@@ -56,6 +58,29 @@ namespace Testes
             var setupData = new SetupFile(@"A:\TEMP\TESTE.CMD", @"A:\TEMP");
             DoRun.Run(new SetupData { Executable = setupData, Arguments = "ARGUMENTO 1" }, @"A:\TEMP", out string message);
             Console.WriteLine(message);
+        }
+
+        [TestMethod]
+        public void CacheFolder()
+        {
+            SetupData.Create(@"A:\TBYTE", out SetupData setup, out string msg);
+            Console.WriteLine(IO.CacheFolder(setup,true));
+
+        }
+
+        [TestMethod]
+        public void Versions()
+        {
+            Assert.IsTrue(new gs_loader.Setup.Version("10.0.2.1").CompareTo("9.2.3.9") > 0);
+            Assert.IsTrue(new gs_loader.Setup.Version("10.0.2.1").CompareTo("11.2.3.9") < 0);
+            Assert.IsTrue(new gs_loader.Setup.Version("10.0.1.1").CompareTo("10.0.2.1") < 0);
+        }
+
+        [TestMethod]
+        public void Backup()
+        {
+            SetupData.Create(@"A:\TBYTE", out SetupData setup, out string msg);
+            DoUpdate.Backup(setup, @"A:\TBYTE");
         }
     }
 }
