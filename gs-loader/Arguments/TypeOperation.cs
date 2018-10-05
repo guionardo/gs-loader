@@ -4,6 +4,7 @@
     {
         Help = 0,
         Setup = 1,
-        Run = 2
+        Run = 2,
+        Update = 3
     }
 }

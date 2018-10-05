@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using gs_loader.Arguments;
 using gs_loader.Base;
 using gs_loader.Run;
@@ -81,6 +82,13 @@ namespace Testes
         {
             SetupData.Create(@"A:\TBYTE", out SetupData setup, out string msg);
             DoUpdate.Backup(setup, @"A:\TBYTE");
+        }
+
+        [TestMethod]
+        public void InstanciasExecutando()
+        {
+            //Process.Start("notepad.exe");
+            Assert.IsTrue(DoRun.InstancesRunning("notepad.exe"));
         }
     }
 }

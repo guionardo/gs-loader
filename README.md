@@ -4,14 +4,17 @@ Guiosoft Loader: Aplicação para carregamento e atualização de sistemas
 
 ## Funções
 
+- [x] Mostrar help
 - [ ] Criar/editar arquivo de configuração.
 - [ ] Executar programa
-  - [ ] Verificar se já está em execução
-- [ ] Verificar atualização
+  - [x] Verificar se já está em execução
+- [ ] Atualização
   - [ ] A partir deu uma pasta
   - [ ] Via HTTP
   - [ ] Via FTP
-- [ ] Telemetria
-    - [ ] Registrar execuções
-    - [ ] Registrar saídas inválidas
-    - [ ] Produzir estatísticas
+- [ ] Informações
+	- [x] Mostrar informações sobre o processo corrente
+	- [ ] Registrar execuções
+	- [ ] Registrar saídas inválidas
+	- [ ] Produzir estatísticas
+

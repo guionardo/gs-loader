@@ -10,6 +10,8 @@ namespace gs_loader.Operations
 {
     public static class DoOperations
     {
+       
+
         public static Form ShowHelp(string content)
         {
             string exe = "null"; // Path.GetFileName(System.Reflection.Assembly.GetEntryAssembly().Location);
@@ -27,10 +29,7 @@ Utilização: {exe} [opções]
 
         }
 
-        internal static Form Setup(string setupFile) => new SetupForm(setupFile);
-
-
-        internal static Form Run(string setupFile)
+        internal static bool Run(string setupFile)
         {
             if (string.IsNullOrEmpty(setupFile))
                 setupFile = Environment.CurrentDirectory;
@@ -38,19 +37,26 @@ Utilização: {exe} [opções]
             setupFile = SetupData.ParseFileName(setupFile);
             if (!File.Exists(setupFile))
             {
-                Communication.Send("Arquivo de setup inexistente: " + setupFile);
-                return null;
+                Communication.Send("Arquivo de setup inexistente: " + setupFile, true, Communication.CommunicationType.Dialog);
+                return false;
             }
             if (!SetupData.Read(setupFile, out SetupData setupData, out string message))
             {
                 //DONE: Run: Exibir mensagem de erro ao ler o arquivo setup
-                Communication.Send("Erro na leitura do arquivo de setup: " + message, true);
-                return null;
+                Communication.Send("Erro na leitura do arquivo de setup: " + message, true, Communication.CommunicationType.Dialog);
+                return false;
             }
-            return new RunningForm(setupData, Path.GetDirectoryName(setupFile));
 
-            //TODO: Run: Exibir mensagem de erro
+            if (!DoRun.Run(setupData, Path.GetDirectoryName(setupFile), out message))
+            {
+                Communication.Send(message, true, Communication.CommunicationType.Notify);
+                //DONE: Run: Exibir mensagem de erro
+                return false;
+            }
 
+            return true;
         }
+
+        internal static Form Setup(string setupFile) => new SetupForm(setupFile);
     }
 }
