@@ -4,6 +4,7 @@ using gs_loader.Arguments;
 using gs_loader.Base;
 using gs_loader.Run;
 using gs_loader.Setup;
+using gs_loader.Stats;
 using gs_loader.Update;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -65,7 +66,7 @@ namespace Testes
         public void CacheFolder()
         {
             SetupData.Create(@"A:\TBYTE", out SetupData setup, out string msg);
-            Console.WriteLine(IO.CacheFolder(setup,true));
+            Console.WriteLine(IO.CacheFolder(setup, true));
 
         }
 
@@ -90,5 +91,34 @@ namespace Testes
             //Process.Start("notepad.exe");
             Assert.IsTrue(DoRun.InstancesRunning("notepad.exe"));
         }
+
+        [TestMethod]
+        public void ListarInstancias()
+        {
+            System.Collections.Generic.List<ProcessInstance> procs = new System.Collections.Generic.List<ProcessInstance>();
+            if (DoStats.ListAllProcesses(procs))
+            {
+                foreach (var p in procs)
+                    Console.WriteLine(p);
+            }
+
+            System.Collections.Generic.List<string> uniques = null;
+            if (DoStats.ListUniqueProcesses(ref uniques))
+            {
+                foreach (var u in uniques)
+                    Console.WriteLine(u);
+            }
+
+
+
+            System.Collections.Generic.List<ProcessInstance> instances = null;
+            if (DoStats.ListInstances("notepad",ref instances))
+            {
+                foreach (var i in instances)
+                    Console.WriteLine(i);
+            }
+
+        }
+
     }
 }

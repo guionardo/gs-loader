@@ -1,6 +1,7 @@
 ﻿using gs_loader.Base;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace gs_loader.Forms
@@ -38,32 +39,40 @@ namespace gs_loader.Forms
                     if (value is string)
                         ProcessDescription = value.ToString();
                     break;
+
                 case UpdateIconType.Text:
                     nIcon.Text = value.ToString();
                     break;
+
                 case UpdateIconType.Visible:
                     if (value is bool)
                         nIcon.Visible = (bool)value;
                     break;
+
                 case UpdateIconType.ProcessInfo:
                     if (value is Process)
                         ProcessInfo = (Process)value;
                     break;
-
-
 
                 case UpdateIconType.ShowBaloonInfo:
                     if (value is string)
                         nIcon.ShowBalloonTip(10000, ProcessDescription, value.ToString(), ToolTipIcon.Info);
 
                     break;
+
                 case UpdateIconType.ShowBalloonError:
                     if (value is string)
                         nIcon.ShowBalloonTip(10000, ProcessDescription, value.ToString(), ToolTipIcon.Error);
                     break;
 
+                case UpdateIconType.SetIcon:
+                    if (value is Icon)
+                        nIcon.Icon = (Icon)value;
+                    break;
 
-
+                case UpdateIconType.RestoreIcon:
+                    nIcon.Icon = Properties.Resources.icon;
+                    break;
             }
         }
 

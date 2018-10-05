@@ -14,7 +14,7 @@ Guiosoft Loader: Aplicação para carregamento e atualização de sistemas
   - [ ] Via FTP
 - [ ] Informações
 	- [x] Mostrar informações sobre o processo corrente
-	- [ ] Registrar execuções
+	- [x] Registrar execuções
 	- [ ] Registrar saídas inválidas
 	- [ ] Produzir estatísticas
 

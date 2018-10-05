@@ -102,6 +102,8 @@
     <Compile Include="Setup\SetupData.cs" />
     <Compile Include="Setup\SetupFile.cs" />
     <Compile Include="Setup\Version.cs" />
+    <Compile Include="Stats\DoStats.cs" />
+    <Compile Include="Stats\ProcessInstance.cs" />
     <Compile Include="Update\DoUpdate.cs" />
     <Compile Include="Update\IUpdateMethod.cs" />
     <Compile Include="Update\UpdateFromFolder.cs" />
@@ -144,13 +146,14 @@
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
     <Content Include="icon.ico" />
+    <Content Include="Images\icones.svg" />
     <None Include="Images\icon.ico" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_UseGlobalSettings="True" BuildVersion_StartDate="2018/10/3" />
+      <UserProperties BuildVersion_StartDate="2018/10/3" BuildVersion_UseGlobalSettings="True" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

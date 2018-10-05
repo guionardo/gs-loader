@@ -29,6 +29,14 @@
         /// <summary>
         /// Fechar o balão
         /// </summary>
-        CloseBaloon        
+        CloseBaloon,
+        /// <summary>
+        /// Define o ícone do traybar
+        /// </summary>
+        SetIcon,
+        /// <summary>
+        /// Restaura o ícone do traybar
+        /// </summary>
+        RestoreIcon
     }
 }

@@ -1,9 +1,11 @@
 ﻿using gs_loader.Base;
 using gs_loader.Forms;
 using gs_loader.Setup;
+using gs_loader.Stats;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -41,6 +43,16 @@ namespace gs_loader.Run
             ProcessWorker = new BackgroundWorker();
             bool success = false;
             IsRunning = true;
+            try
+            {
+                Icon icon = Icon.ExtractAssociatedIcon(Path.Combine(folder, setupData.Executable.File));
+                NotifyLoader.UpdateIcon(UpdateIconType.SetIcon, icon);
+            }
+            catch (Exception e)
+            {
+                Log.Add(e.Message, "EXCEPTION");
+            }
+
             ProcessWorker.DoWork += (object sender, DoWorkEventArgs e) =>
             {
                 currentProcess = new Process();
@@ -60,6 +72,7 @@ namespace gs_loader.Run
 
                     currentProcess.Start();
                     currentProcess.WaitForExit();
+                    DoStats.RegisterProcess(currentProcess);
                     NotifyLoader.UpdateIcon(UpdateIconType.ShowBaloonInfo, setupData.Executable.Description + " FINALIZANDO");
                     Log.Add(setupData.Executable.File + "\n" + currentProcess.StartTime + " -> " + currentProcess.ExitTime + "\n" +
                         "ExitCode: " + currentProcess.ExitCode + "\n" +
@@ -75,10 +88,11 @@ namespace gs_loader.Run
 
                 }
                 IsRunning = false;
+                NotifyLoader.UpdateIcon(UpdateIconType.RestoreIcon, null);
             };
             ProcessWorker.RunWorkerAsync();
             message = "";
-            return success;            
+            return success;
         }
 
         private static void CurrentProcess_Exited(object sender, EventArgs e)
@@ -94,10 +108,11 @@ namespace gs_loader.Run
             NotifyLoader.UpdateIcon(UpdateIconType.ProcessInfo, (Process)null);
         }
 
-       
+
 
         public static bool InstancesRunning(string file)
         {
+            if (string.IsNullOrEmpty(file)) return false;
             try
             {
                 var processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(file));
@@ -117,7 +132,8 @@ namespace gs_loader.Run
             }
             catch (Exception e)
             {
-                //TODO: Registrar exceção
+                Log.Add("InstancesRunning(" + file + "):" + e.Message, "EXCEPTION");
+                //DONE: Registrar exceção
             }
 
             return false;

@@ -28,10 +28,10 @@ namespace gs_loader
 
             SetupData setup = new SetupData
             {
-                Executable = new SetupFile(@"C:\WINDOWS\NOTEPAD.EXE", @"C:\WINDOWS"),
-                JustOneInstance = true
+                Executable = new SetupFile(@"A:\TBYTE\TBYTE.EXE", @"C:\WINDOWS"),
+                JustOneInstance = false
             };
-            if (DoRun.Run(setup,@"C:\WINDOWS",out string message))
+            if (DoRun.Run(setup,@"A:\TBYTE",out string message))
             {
 
             }
