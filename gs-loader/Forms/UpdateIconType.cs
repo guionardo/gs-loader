@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace gs_loader.Forms
+﻿namespace gs_loader.Forms
 {
     public enum UpdateIconType
     {
@@ -19,6 +13,22 @@ namespace gs_loader.Forms
         /// <summary>
         /// Registra a informação do processo para visualização via ContextMenu
         /// </summary>
-        ProcessInfo
+        ProcessInfo,
+        /// <summary>
+        /// Mostra informação com o balão 
+        /// </summary>
+        ShowBaloonInfo,
+        /// <summary>
+        /// Mostra erro com o balão
+        /// </summary>
+        ShowBalloonError,
+        /// <summary>
+        /// Define descrição do processo
+        /// </summary>
+        ProcessDescription,
+        /// <summary>
+        /// Fechar o balão
+        /// </summary>
+        CloseBaloon        
     }
 }

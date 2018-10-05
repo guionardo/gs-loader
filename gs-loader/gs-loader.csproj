@@ -80,12 +80,8 @@
     <Compile Include="Forms\HelpForm.Designer.cs">
       <DependentUpon>HelpForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\RunningForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\RunningForm.Designer.cs">
-      <DependentUpon>RunningForm.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Forms\MenuItemType.cs" />
+    <Compile Include="Forms\NotifyLoader.cs" />
     <Compile Include="Forms\SetupForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,9 +110,6 @@
     <Compile Include="Update\UpdateType.cs" />
     <EmbeddedResource Include="Forms\HelpForm.resx">
       <DependentUpon>HelpForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\RunningForm.resx">
-      <DependentUpon>RunningForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SetupForm.resx">
       <DependentUpon>SetupForm.cs</DependentUpon>
@@ -157,7 +150,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_StartDate="2018/10/3" BuildVersion_UseGlobalSettings="True" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" />
+      <UserProperties BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_UseGlobalSettings="True" BuildVersion_StartDate="2018/10/3" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

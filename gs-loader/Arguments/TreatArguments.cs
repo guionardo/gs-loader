@@ -24,6 +24,11 @@ namespace gs_loader.Arguments
             {
                 Operation = TypeOperation.Run;
                 SetupFile = v;
+            } },
+            {"u|update:","Atualizar sistema", v=>
+            {
+                Operation = TypeOperation.Update;
+                SetupFile = v;
             } }
         };
 
@@ -53,7 +58,7 @@ namespace gs_loader.Arguments
             switch (Operation)
             {
                 case TypeOperation.Setup:
-                    OperationForm=DoOperations.Setup(SetupFile);
+                    OperationForm = DoOperations.Setup(SetupFile);
                     break;
                 case TypeOperation.Run:
                     DoOperations.Run(SetupFile);
@@ -61,7 +66,7 @@ namespace gs_loader.Arguments
                 default:
                     StringWriter m = new StringWriter();
                     Options.WriteOptionDescriptions(m);
-                   OperationForm= DoOperations.ShowHelp(m.ToString());
+                    OperationForm = DoOperations.ShowHelp(m.ToString());
                     break;
             }
 

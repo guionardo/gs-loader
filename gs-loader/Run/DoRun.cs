@@ -1,6 +1,8 @@
-﻿using gs_loader.Forms;
+﻿using gs_loader.Base;
+using gs_loader.Forms;
 using gs_loader.Setup;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -10,30 +12,76 @@ namespace gs_loader.Run
     public static class DoRun
     {
         const int SW_RESTORE = 9;
-
         const string USER32 = "USER32.DLL";
-        static Process currentProcess = null;
 
-        public static bool Run(SetupData setupData, string folder, out string message, Action<UpdateIconType,object> updateNotify)
+        static Process currentProcess = null;
+        static BackgroundWorker ProcessWorker = new BackgroundWorker();
+        public static bool IsRunning { get; private set; } = false;
+
+        public static bool Run(SetupData setupData, string folder, out string message)
         {
+
             currentProcess = null;
             Directory.SetCurrentDirectory(folder);
             if (!File.Exists(setupData.Executable.File))
             {
+                Log.Add(setupData.Executable.File + " INEXISTENTE", "ERRO");
                 message = "Executável inexistente em " + setupData.Executable.File;
                 return false;
             }
 
             if (setupData.JustOneInstance && InstancesRunning(setupData.Executable.File))
             {
+                Log.Add(setupData.Executable.File + " JÁ EM EXECUÇÃO", "ERRO");
                 message = "Instância já em execução";
                 return false;
             }
-            currentProcess = new Process();
-            currentProcess.StartInfo.FileName = setupData.Executable.File;
-            if (!string.IsNullOrEmpty(setupData.Arguments))
-                currentProcess.StartInfo.Arguments = setupData.Arguments;
-            currentProcess.Exited += (object sender, EventArgs e) =>
+
+
+            ProcessWorker = new BackgroundWorker();
+            bool success = false;
+            IsRunning = true;
+            ProcessWorker.DoWork += (object sender, DoWorkEventArgs e) =>
+            {
+                currentProcess = new Process();
+                NotifyLoader.UpdateIcon(UpdateIconType.ProcessInfo, currentProcess);
+
+                currentProcess.StartInfo.FileName = setupData.Executable.File;
+                if (!string.IsNullOrEmpty(setupData.Arguments))
+                    currentProcess.StartInfo.Arguments = setupData.Arguments;
+                currentProcess.Exited += CurrentProcess_Exited;
+                currentProcess.EnableRaisingEvents = true;
+
+                try
+                {
+                    Log.Add(setupData.Executable.File, "START");
+                    //DONE: Registrar log STARTING   
+                    NotifyLoader.UpdateIcon(UpdateIconType.ShowBaloonInfo, setupData.Executable.Description);
+
+                    currentProcess.Start();
+                    currentProcess.WaitForExit();
+                    NotifyLoader.UpdateIcon(UpdateIconType.ShowBaloonInfo, setupData.Executable.Description + " FINALIZANDO");
+                    Log.Add(setupData.Executable.File + "\n" + currentProcess.StartTime + " -> " + currentProcess.ExitTime + "\n" +
+                        "ExitCode: " + currentProcess.ExitCode + "\n" +
+                        "TotalProcessorTime: " + currentProcess.TotalProcessorTime
+                        , "STOP");
+                    //DONE: Registrar log STARTED
+                    success = true;
+                }
+                catch (Exception ex)
+                {
+                    Log.Add(ex.Message, "EXCEPTION");
+                    //DONE: Registrar log START EXCEPTION
+
+                }
+                IsRunning = false;
+            };
+            ProcessWorker.RunWorkerAsync();
+            message = "";
+            return success;            
+        }
+
+        private static void CurrentProcess_Exited(object sender, EventArgs e)
         {
             if (currentProcess == null)
             {
@@ -43,44 +91,29 @@ namespace gs_loader.Run
             {
                 //TODO: Registrar log de saída com data/hora de início, data/hora de saída e ExitCode                
             }
-        };
-            currentProcess.EnableRaisingEvents = true;
-            try
-            {
-                //TODO: Registrar log STARTING                
-                currentProcess.Start();
-                currentProcess.WaitForExit();
-                //TODO: Registrar log STARTED
-                message = "OK";
-                return true;
-            }
-            catch (Exception e)
-            {
-                //TODO: Registrar log START EXCEPTION
-                message = e.Message;
-
-            }
-            return false;
+            NotifyLoader.UpdateIcon(UpdateIconType.ProcessInfo, (Process)null);
         }
 
-        private static bool InstancesRunning(string file)
+       
+
+        public static bool InstancesRunning(string file)
         {
             try
             {
-                var processes = Process.GetProcessesByName(Path.GetFileName(file));
+                var processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(file));
                 if (processes.Length == 0)
                     return false;
-                foreach (var p in processes)
-                    if (p.StartInfo.FileName.Equals(file, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        if (p.MainWindowHandle != null)
-                        {
-                            if (IsIconic(p.MainWindowHandle))
-                                ShowWindow(p.MainWindowHandle, SW_RESTORE);
-                            SetForegroundWindow(p.MainWindowHandle);
-                        }
-                        return true;
-                    }
+
+                NotifyLoader.UpdateIcon(UpdateIconType.ShowBalloonError, "Processo " + Path.GetFileNameWithoutExtension(file) + " já está em execução.");
+
+                if (processes[0].MainWindowHandle != null)
+                {
+                    if (IsIconic(processes[0].MainWindowHandle))
+                        ShowWindow(processes[0].MainWindowHandle, SW_RESTORE);
+                    SetForegroundWindow(processes[0].MainWindowHandle);
+                }
+                return true;
+
             }
             catch (Exception e)
             {
@@ -92,7 +125,6 @@ namespace gs_loader.Run
 
         [DllImport(USER32)]
         static extern bool IsIconic(IntPtr handle);
-
         [DllImport(USER32)]
         static extern bool SetForegroundWindow(IntPtr hWnd);
         [DllImport(USER32)]

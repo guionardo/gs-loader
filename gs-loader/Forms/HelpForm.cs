@@ -15,6 +15,12 @@ namespace gs_loader.Forms
         public HelpForm(string content)
         {
             InitializeComponent();
+            rtbHelp.Text = content;
+        }
+
+        private void HelpForm_Load(object sender, EventArgs e)
+        {
+            NotifyLoader.UpdateIcon(UpdateIconType.ShowBaloonInfo, "Linha de comando");
         }
     }
 }

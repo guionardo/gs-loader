@@ -1,16 +1,18 @@
 ﻿using gs_loader.Arguments;
 using gs_loader.Base;
 using gs_loader.Forms;
+using gs_loader.Operations;
 using gs_loader.Run;
 using gs_loader.Setup;
 using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace gs_loader
 {
     static class Program
     {
-        static NotifyIcon nIcon = new NotifyIcon();
+
         /// <summary>
         /// Ponto de entrada principal para o aplicativo.
         /// </summary>
@@ -20,39 +22,46 @@ namespace gs_loader
             Exceptions.Install();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            nIcon.Icon = Properties.Resources.icon;
-            UpdateIcon(UpdateIconType.Text, "GS-Loader");
-            UpdateIcon(UpdateIconType.Visible, true);
 
-            if (!SetupData.Create(@"A:\TBYTE", out SetupData setup, out string msg))
+            NotifyLoader.UpdateIcon(UpdateIconType.Text, "GS-Loader");
+            NotifyLoader.UpdateIcon(UpdateIconType.Visible, true);
+
+            SetupData setup = new SetupData
             {
-                return;
+                Executable = new SetupFile(@"C:\WINDOWS\NOTEPAD.EXE", @"C:\WINDOWS"),
+                JustOneInstance = true
+            };
+            if (DoRun.Run(setup,@"C:\WINDOWS",out string message))
+            {
+
             }
 
-            if (DoRun.Run(setup, @"A:\TBYTE", out string message, UpdateIcon))
-            {
+            /*    if (!SetupData.Create(@"A:\TBYTE", out SetupData setup, out string msg))
+                {
+                    NotifyLoader.UpdateIcon(UpdateIconType.ShowBalloonError, msg);
+                    return;
+                }
 
-            }
-            Application.Run(new RunningForm(setup, @"A:\TBYTE"));
-            /*
+                if (DoRun.Run(setup, @"A:\TBYTE", out string message))
+                {
+
+                }
+                */
             TreatArguments.Parse(args);
             if (TreatArguments.OperationForm != null)
-                Application.Run(TreatArguments.OperationForm);
-                */
+            {
+       //         Application.Run(TreatArguments.OperationForm);
+            } 
+            
+                while (DoRun.IsRunning)
+                {
+                    Application.DoEvents();
+                    Thread.Sleep(100);
+                }
+
+            NotifyLoader.UpdateIcon(UpdateIconType.Visible, false);
         }
 
-        public static void UpdateIcon(UpdateIconType type, object value)
-        {
-            switch (type)
-            {
-                case UpdateIconType.Text:
-                    nIcon.Text = value.ToString();
-                    break;
-                case UpdateIconType.Visible:
-                    if (value is bool)
-                        nIcon.Visible = (bool)value;
-                    break;
-            }
-        }
+
     }
 }
