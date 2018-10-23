@@ -84,7 +84,7 @@ namespace gs_loader.Components
                 while (l.StartsWith(".") || l.StartsWith("*"))
                     l = l.Substring(1);
 
-                l = "*." + l;
+                l = "." + l;
 
                 bool found = false;
                 foreach (var i in listaV)

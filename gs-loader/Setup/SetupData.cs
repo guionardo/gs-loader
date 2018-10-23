@@ -23,7 +23,7 @@ namespace gs_loader.Setup
         /// <summary>
         /// Extensões padrão para ignorar
         /// </summary>
-        public static readonly string[] DefaultIgnoredExtensions = new string[] { "*.bak", "*.tmp", "*.obj" };
+        public static readonly string[] DefaultIgnoredExtensions = new string[] { "*.bak", "*.tmp", "*.obj", "*.xml" };
 
         public string[] IncludeExtensions = DefaultExtensions;
         public string[] IgnoredExtensions = DefaultIgnoredExtensions;
@@ -54,6 +54,12 @@ namespace gs_loader.Setup
         public UpdateSource UpdateSource { get; set; }
 
         public UpdateType UpdateType { get; set; }
+
+        /// <summary>
+        /// Arquivo de configuração lido
+        /// </summary>
+        [JsonIgnore]
+        public string SetupFile { get; set; }
 
         /// <summary>
         /// Cria uma instância de setup a partir de um executável ou pasta
@@ -162,6 +168,7 @@ namespace gs_loader.Setup
             {
                 string json = File.ReadAllText(fileName);
                 setupData = JsonConvert.DeserializeObject<SetupData>(json);
+                setupData.SetupFile = fileName;
                 message = "OK";
                 return true;
             }

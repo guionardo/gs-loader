@@ -72,6 +72,7 @@
     <Compile Include="Base\Communication.cs" />
     <Compile Include="Base\Dialog.cs" />
     <Compile Include="Base\Exceptions.cs" />
+    <Compile Include="Base\Extensions.cs" />
     <Compile Include="Base\IO.cs" />
     <Compile Include="Base\Log.cs" />
     <Compile Include="Components\DefaultExts.cs">
@@ -79,6 +80,12 @@
     </Compile>
     <Compile Include="Components\DefaultExts.Designer.cs">
       <DependentUpon>DefaultExts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\SelectFile.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\SelectFile.Designer.cs">
+      <DependentUpon>SelectFile.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\HelpForm.cs">
       <SubType>Form</SubType>
@@ -88,6 +95,7 @@
     </Compile>
     <Compile Include="Forms\MenuItemType.cs" />
     <Compile Include="Forms\NotifyLoader.cs" />
+    <Compile Include="Forms\SetupFileItem.cs" />
     <Compile Include="Forms\SetupForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,6 +126,9 @@
     <Compile Include="Update\UpdateType.cs" />
     <EmbeddedResource Include="Components\DefaultExts.resx">
       <DependentUpon>DefaultExts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\SelectFile.resx">
+      <DependentUpon>SelectFile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\HelpForm.resx">
       <DependentUpon>HelpForm.cs</DependentUpon>
