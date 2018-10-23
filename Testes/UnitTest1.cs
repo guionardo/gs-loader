@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using gs_loader.Arguments;
 using gs_loader.Base;
+using gs_loader.Forms;
 using gs_loader.Run;
 using gs_loader.Setup;
 using gs_loader.Stats;
@@ -112,12 +113,22 @@ namespace Testes
 
 
             System.Collections.Generic.List<ProcessInstance> instances = null;
-            if (DoStats.ListInstances("notepad",ref instances))
+            if (DoStats.ListInstances("notepad", ref instances))
             {
                 foreach (var i in instances)
                     Console.WriteLine(i);
             }
 
+        }
+
+        [TestMethod]
+        public void SetupForm()
+        {
+            SetupData setupData = new SetupData();
+            using (var sf = new SetupForm(setupData))
+            {
+                sf.ShowDialog();
+            }
         }
 
     }

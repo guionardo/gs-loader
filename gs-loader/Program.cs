@@ -26,15 +26,15 @@ namespace gs_loader
             NotifyLoader.UpdateIcon(UpdateIconType.Text, "GS-Loader");
             NotifyLoader.UpdateIcon(UpdateIconType.Visible, true);
 
-            SetupData setup = new SetupData
-            {
-                Executable = new SetupFile(@"A:\TBYTE\TBYTE.EXE", @"C:\WINDOWS"),
-                JustOneInstance = false
-            };
-            if (DoRun.Run(setup,@"A:\TBYTE",out string message))
-            {
+            /*            SetupData setup = new SetupData
+                        {
+                            Executable = new SetupFile(@"A:\TBYTE\TBYTE.EXE", @"C:\WINDOWS"),
+                            JustOneInstance = false
+                        };
+                        if (DoRun.Run(setup,@"A:\TBYTE",out string message))
+                        {
 
-            }
+                        }*/
 
             /*    if (!SetupData.Create(@"A:\TBYTE", out SetupData setup, out string msg))
                 {
@@ -47,17 +47,19 @@ namespace gs_loader
 
                 }
                 */
+
+            args = new string[] { "--setup:C:\\TEMP" };
             TreatArguments.Parse(args);
             if (TreatArguments.OperationForm != null)
             {
-       //         Application.Run(TreatArguments.OperationForm);
-            } 
-            
-                while (DoRun.IsRunning)
-                {
-                    Application.DoEvents();
-                    Thread.Sleep(100);
-                }
+                Application.Run(TreatArguments.OperationForm);
+            }
+
+            while (DoRun.IsRunning)
+            {
+                Application.DoEvents();
+                Thread.Sleep(100);
+            }
 
             NotifyLoader.UpdateIcon(UpdateIconType.Visible, false);
         }

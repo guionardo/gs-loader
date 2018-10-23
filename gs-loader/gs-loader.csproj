@@ -74,6 +74,12 @@
     <Compile Include="Base\Exceptions.cs" />
     <Compile Include="Base\IO.cs" />
     <Compile Include="Base\Log.cs" />
+    <Compile Include="Components\DefaultExts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\DefaultExts.Designer.cs">
+      <DependentUpon>DefaultExts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\HelpForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +116,9 @@
     <Compile Include="Update\UpdateSource.cs" />
     <Compile Include="Update\UpdateSourceType.cs" />
     <Compile Include="Update\UpdateType.cs" />
+    <EmbeddedResource Include="Components\DefaultExts.resx">
+      <DependentUpon>DefaultExts.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\HelpForm.resx">
       <DependentUpon>HelpForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -153,7 +162,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_StartDate="2018/10/3" BuildVersion_UseGlobalSettings="True" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" />
+      <UserProperties BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_UseGlobalSettings="True" BuildVersion_StartDate="2018/10/3" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

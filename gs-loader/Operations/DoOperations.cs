@@ -10,7 +10,7 @@ namespace gs_loader.Operations
 {
     public static class DoOperations
     {
-       
+
 
         public static Form ShowHelp(string content)
         {
@@ -57,6 +57,17 @@ Utilização: {exe} [opções]
             return true;
         }
 
-        internal static Form Setup(string setupFile) => new SetupForm(setupFile);
+        internal static Form Setup(string setupFile)
+        {
+            SetupData _setupData;
+            setupFile = SetupData.ParseFileName(setupFile);
+            if (!File.Exists(setupFile))
+                SetupData.CreateEmptySetupFile(setupFile);
+            if (!SetupData.Read(setupFile, out _setupData, out string msg))
+                return null;
+
+            return new SetupForm(_setupData);
+        }
+
     }
 }

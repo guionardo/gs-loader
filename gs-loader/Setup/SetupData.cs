@@ -21,6 +21,14 @@ namespace gs_loader.Setup
         public static readonly string[] DefaultExtensions = new string[] { "*.exe", "*.dll" };
 
         /// <summary>
+        /// Extensões padrão para ignorar
+        /// </summary>
+        public static readonly string[] DefaultIgnoredExtensions = new string[] { "*.bak", "*.tmp", "*.obj" };
+
+        public string[] IncludeExtensions = DefaultExtensions;
+        public string[] IgnoredExtensions = DefaultIgnoredExtensions;
+
+        /// <summary>
         /// Argumentos utilizados na linha de comando do executável
         /// </summary>
         public string Arguments { get; set; }
@@ -162,6 +170,15 @@ namespace gs_loader.Setup
                 message = e.Message;
                 return false;
             }
+        }
+
+        public static bool CreateEmptySetupFile(string fileName)
+        {
+            fileName = ParseFileName(fileName);
+            if (string.IsNullOrEmpty(fileName))
+                return false;
+            var sd = new SetupData();
+            return Write(fileName, sd, out string message);
         }
 
         /// <summary>
