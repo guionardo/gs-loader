@@ -4,7 +4,7 @@ using System.IO;
 
 namespace gs_loader.Setup
 {
-    public class Version : IComparable
+    public class Version : IComparable, ICloneable
     {
         public Version(string version)
         {
@@ -59,5 +59,14 @@ namespace gs_loader.Setup
                 catch { }
             return new Version();
         }
+
+        public object Clone() => new Version
+        {
+            Major = this.Major,
+            Minor = this.Minor,
+            Build = this.Build,
+            Revision = this.Revision
+        };
+
     }
 }

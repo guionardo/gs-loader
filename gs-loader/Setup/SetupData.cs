@@ -9,7 +9,7 @@ namespace gs_loader.Setup
     /// <summary>
     /// Dados de setup do programa a ser executado/atualizado
     /// </summary>
-    public class SetupData
+    public class SetupData : ICloneable
     {
         /// <summary>
         /// Arquivo de setup padrão
@@ -221,5 +221,16 @@ namespace gs_loader.Setup
                 return false;
             }
         }
+
+        public object Clone() => new SetupData()
+        {
+            Arguments = Arguments,
+            Executable = (SetupFile)Executable.Clone(),
+            Files = new List<SetupFile>(Files),
+            JustOneInstance = JustOneInstance,
+            UpdateSource = (UpdateSource)UpdateSource.Clone(),
+            UpdateType = UpdateType
+        };
+
     }
 }

@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using gs_loader.Components;
+using gs_loader.Update;
 
 namespace gs_loader.Forms
 {
@@ -28,6 +29,13 @@ namespace gs_loader.Forms
             ignoreExts.Value = setupData.IgnoredExtensions;
 
             lblOriginFolder.Text = setupData.SetupFile;
+            chkJustOneInstance.Checked = setupData.JustOneInstance;
+            editUpdateSource.UpdateSource = setupData.UpdateSource;
+            editUpdateSource.UpdateType = setupData.UpdateType;
+
+            if (setupData.Executable != null)
+                txExecutable.Text = setupData.Executable.File;
+            txArguments.Text = setupData.Arguments;
 
             ParseFiles(Path.GetDirectoryName(setupData.SetupFile), setupData.Files);
         }
@@ -106,28 +114,26 @@ namespace gs_loader.Forms
         {
             if (e.RowIndex < 0 || e.RowIndex >= setupFiles.Count)
                 return;
+            SetupFileItem setupFileItem = setupFiles[e.RowIndex];
             switch (e.ColumnIndex)
             {
                 case 0: // Arquivo local
-                    e.Value = setupFiles[e.RowIndex].FileName;
+                    e.Value = setupFileItem.FileName;
                     break;
                 case 1: // Pasta
-                    if (setupFiles[e.RowIndex].SetupFile == null)
-                        e.Value = "";
-                    else
-                        e.Value = setupFiles[e.RowIndex].SetupFile.Folder;
+                    e.Value = setupFileItem.SetupFile == null ? "" : setupFileItem.SetupFile.Folder;
                     break;
                 case 2: // Estado
-                    e.Value = setupFiles[e.RowIndex].State;
+                    e.Value = setupFileItem.State;
                     break;
                 case 3: // Tamanho
-                    e.Value = setupFiles[e.RowIndex].SetupFile.Size;
+                    e.Value = setupFileItem.SetupFile.Size;
                     break;
                 case 4: // MD-5
-                    e.Value = setupFiles[e.RowIndex].SetupFile.MD5;
+                    e.Value = setupFileItem.SetupFile.MD5;
                     break;
                 case 5: // Incluir
-                    e.Value = setupFiles[e.RowIndex].Include;
+                    e.Value = setupFileItem.Include;
                     break;
             }
         }
@@ -137,6 +143,44 @@ namespace gs_loader.Forms
             if (e.RowIndex < 0 || e.RowIndex >= setupFiles.Count || e.ColumnIndex != 5)
                 return;
             setupFiles[e.RowIndex].Include = !setupFiles[e.RowIndex].Include;
+        }
+
+        private void ButtonClick(object sender, EventArgs e)
+        {
+            if (sender == btnCancelar)
+            {
+                Close();
+            }
+            else
+            {
+                if (!Dialog.YesNo("Deseja gravar o arquivo de setup em " + lblOriginFolder.Text + "?"))
+                    return;
+                SetupData setup = new SetupData()
+                {
+                    Executable = new SetupFile(txExecutable.Text),
+                    Arguments = txArguments.Text,
+                    IgnoredExtensions = ignoreExts.Value,
+                    IncludeExtensions = includeExts.Value,
+                    JustOneInstance = chkJustOneInstance.Checked,
+                    UpdateSource = (UpdateSource)editUpdateSource.UpdateSource.Clone(),
+                    UpdateType = editUpdateSource.UpdateType,
+                    Files = new List<SetupFile>()
+                };
+                foreach (var f in setupFiles)
+                {
+                    if (f.Include)
+                        setup.Files.Add(f.SetupFile);
+                }
+                if (SetupData.Write(lblOriginFolder.Text, setup, out string message))
+                {
+                    Dialog.Message("Dados gravados em " + lblOriginFolder.Text + "\n\n" + message);
+                }
+                else
+                {
+                    Dialog.Error("Erro ao gravar em " + lblOriginFolder.Text + "\n\n" + message);
+                }
+
+            }
         }
     }
 }

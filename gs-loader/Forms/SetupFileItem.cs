@@ -12,6 +12,7 @@ namespace gs_loader.Forms
         public SetupFile SetupFile;
         public SetupFileState State;
         public bool Include;
+        
     }
 
     public enum SetupFileState

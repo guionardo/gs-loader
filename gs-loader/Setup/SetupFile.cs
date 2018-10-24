@@ -5,7 +5,7 @@ using System.IO;
 
 namespace gs_loader.Setup
 {
-    public class SetupFile
+    public class SetupFile : ICloneable
     {
         public string File { get; set; }
         public Version Version { get; set; }
@@ -14,6 +14,8 @@ namespace gs_loader.Setup
         public long Size { get; set; }
         public DateTime CreationTime { get; set; }
         public string Folder { get; set; }
+
+        private SetupFile() { }
 
         public SetupFile(string fileName, string baseFolder = null)
         {
@@ -54,5 +56,19 @@ namespace gs_loader.Setup
 
             }
         }
+
+        public object Clone() => new SetupFile
+        {
+            File = File,
+            Version = (Version)Version.Clone(),
+            Description = Description,
+            MD5 = MD5,
+            Size = Size,
+            CreationTime = CreationTime,
+            Folder = Folder
+        };
+
+
+
     }
 }

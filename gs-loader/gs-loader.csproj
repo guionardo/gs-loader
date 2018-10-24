@@ -81,6 +81,12 @@
     <Compile Include="Components\DefaultExts.Designer.cs">
       <DependentUpon>DefaultExts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\EditUpdateSource.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\EditUpdateSource.Designer.cs">
+      <DependentUpon>EditUpdateSource.cs</DependentUpon>
+    </Compile>
     <Compile Include="Components\SelectFile.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -126,6 +132,9 @@
     <Compile Include="Update\UpdateType.cs" />
     <EmbeddedResource Include="Components\DefaultExts.resx">
       <DependentUpon>DefaultExts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\EditUpdateSource.resx">
+      <DependentUpon>EditUpdateSource.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Components\SelectFile.resx">
       <DependentUpon>SelectFile.cs</DependentUpon>
@@ -173,7 +182,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_UseGlobalSettings="True" BuildVersion_StartDate="2018/10/3" />
+      <UserProperties BuildVersion_StartDate="2018/10/3" BuildVersion_UseGlobalSettings="True" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
