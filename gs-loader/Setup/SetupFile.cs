@@ -68,6 +68,9 @@ namespace gs_loader.Setup
             Folder = Folder
         };
 
+        public override string ToString() => (Folder ?? "NOFOLDER") + Path.DirectorySeparatorChar + (File ?? "NOFILE");
+
+
 
 
     }

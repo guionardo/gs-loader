@@ -80,6 +80,7 @@ namespace gs_loader.Forms
                 for (int j = 0; j < setupFiles.Count; i++)
                 {
                     string setupFileName = setupFiles[i].FileName.Substring(setupPath.Length);
+                    //TODO: Revisar o loop em files[i] causando exceção
                     if (setupFileName.Equals(Path.Combine(files[i].Folder, files[i].File), StringComparison.InvariantCultureIgnoreCase))
                     {
                         k = j;
