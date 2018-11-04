@@ -9,6 +9,7 @@ namespace gs_loader.Arguments
 {
     public class TreatArguments
     {
+
         static OptionSet Options = new OptionSet
         {
             {"h|help","Help", v =>
@@ -29,7 +30,22 @@ namespace gs_loader.Arguments
             {
                 Operation = TypeOperation.Update;
                 SetupFile = v;
-            } }
+            } },
+            {"v|verify:", "Verificar arquivos do sistema", v =>
+            {
+                Operation = TypeOperation.Verify;
+                SetupFile = v;
+            } },
+            {"stats:","Estatísticas de execução", v =>
+            {
+                Operation = TypeOperation.Stats;
+                SetupFile = v;
+            } },
+            {"nogui","Informações de processamento via console", v=>
+            {
+                Base.Output.NoGUI = true;
+            }}
+
         };
 
         public static TypeOperation Operation { get; private set; }
@@ -57,11 +73,17 @@ namespace gs_loader.Arguments
 
             switch (Operation)
             {
+                case TypeOperation.Verify:
+                    DoOperations.Verify(SetupFile);
+                    break;
                 case TypeOperation.Setup:
                     OperationForm = DoOperations.Setup(SetupFile);
                     break;
                 case TypeOperation.Run:
                     DoOperations.Run(SetupFile);
+                    break;
+                case TypeOperation.Stats:
+                    DoOperations.Stats(SetupFile);
                     break;
                 default:
                     StringWriter m = new StringWriter();

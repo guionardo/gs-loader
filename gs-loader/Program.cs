@@ -1,9 +1,7 @@
 ﻿using gs_loader.Arguments;
 using gs_loader.Base;
 using gs_loader.Forms;
-using gs_loader.Operations;
 using gs_loader.Run;
-using gs_loader.Setup;
 using System;
 using System.Threading;
 using System.Windows.Forms;
@@ -17,7 +15,7 @@ namespace gs_loader
         /// Ponto de entrada principal para o aplicativo.
         /// </summary>
         [STAThread]
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             Exceptions.Install();
             Application.EnableVisualStyles();
@@ -25,6 +23,14 @@ namespace gs_loader
 
             NotifyLoader.UpdateIcon(UpdateIconType.Text, "GS-Loader");
             NotifyLoader.UpdateIcon(UpdateIconType.Visible, true);
+
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                //args = new string[] { "--setup:C:\\TEMP" };
+                //args = new string[] { "--verify:C:\\TEMP" };
+                args = new string[] { "--stats:C:\\TEMP"};
+            }
+
 
             /*            SetupData setup = new SetupData
                         {
@@ -48,7 +54,7 @@ namespace gs_loader
                 }
                 */
 
-            args = new string[] { "--setup:C:\\TEMP" };
+
             TreatArguments.Parse(args);
             if (TreatArguments.OperationForm != null)
             {
@@ -62,6 +68,8 @@ namespace gs_loader
             }
 
             NotifyLoader.UpdateIcon(UpdateIconType.Visible, false);
+
+            return Output.ExitCode;
         }
 
 

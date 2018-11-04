@@ -8,46 +8,6 @@ namespace gs_loader.Update
 {
     public class DoUpdate
     {
-        /// <summary>
-        /// Verifica se os arquivos do cache existem e tem a mesma característica de setupData
-        /// </summary>
-        /// <param name="setupData"></param>
-        /// <returns></returns>
-        public static bool CheckCache(SetupData setupData)
-        {
-            string cache = IO.CacheFolder(setupData, true);
-            if (string.IsNullOrEmpty(cache) || !Directory.Exists(cache))
-                return false;
-
-            if (!CheckCacheFile(setupData.Executable, cache, out string message))
-            {
-                return false;
-            }
-
-            foreach (var f in setupData.Files)
-                if (!CheckCacheFile(f, cache, out message))
-                    return false;
-            //TODO: Verificar se todos os arquivos listados em setupData existem e tem as mesmas características na pasta cache
-
-            return true;
-
-        }
-
-        public static bool CheckWritable(SetupData setupdata, string localFolder)
-        {
-            if (string.IsNullOrEmpty(localFolder) || !Directory.Exists(localFolder))
-                return false;
-
-            if (!CheckWritableFile(setupdata.Executable, localFolder, out string message))
-                return false;
-
-            foreach (var f in setupdata.Files)
-                if (!CheckWritableFile(f, localFolder, out message))
-                    return false;
-
-            return true;
-        }
-
         public static bool Backup(SetupData setupData, string localFolder)
         {
             if (string.IsNullOrEmpty(localFolder) || !Directory.Exists(localFolder))
@@ -104,36 +64,36 @@ namespace gs_loader.Update
         }
 
         /// <summary>
-        /// Compara o arquivo do cache com a informação de SetupFile
+        /// Verifica se os arquivos do cache existem e tem a mesma característica de setupData
         /// </summary>
-        /// <param name="setupFile"></param>
-        /// <param name="cache"></param>
+        /// <param name="setupData"></param>
         /// <returns></returns>
-        private static bool CheckCacheFile(SetupFile setupFile, string cache, out string message)
+        public static bool CheckCache(SetupData setupData)
         {
-            string file = Path.Combine(cache, setupFile.Folder, setupFile.File);
-            if (!File.Exists(file))
-            {
-                message = "Arquivo " + file + " inexistente";
+            string cache = IO.CacheFolder(setupData, true);
+            if (string.IsNullOrEmpty(cache) || !Directory.Exists(cache))
                 return false;
-            }
-            FileInfo fi = new FileInfo(file);
-            if (fi.Length != setupFile.Size)
-            {
-                message = "Tamanho " + fi.Length + " diferente do esperado " + setupFile.Size;
-                return false;
-            }
-            var md5 = IO.MD5(file);
-            if (!setupFile.MD5.Equals(md5, StringComparison.InvariantCultureIgnoreCase))
-            {
-                message = "MD5 " + md5 + " diferente do esperado " + setupFile.MD5;
-                return false;
-            }
 
-            message = "OK";
-            return true;
+            //DONE: Verificar se todos os arquivos listados em setupData existem e tem as mesmas características na pasta cache
+
+            return SetupVerify.Verify(setupData, cache, out string message);
+
         }
 
+        public static bool CheckWritable(SetupData setupdata, string localFolder)
+        {
+            if (string.IsNullOrEmpty(localFolder) || !Directory.Exists(localFolder))
+                return false;
+
+            if (!CheckWritableFile(setupdata.Executable, localFolder, out string message))
+                return false;
+
+            foreach (var f in setupdata.Files)
+                if (!CheckWritableFile(f, localFolder, out message))
+                    return false;
+
+            return true;
+        }
         /// <summary>
         /// Verifica se um arquivo tem permissão de escrita para este usuário
         /// </summary>

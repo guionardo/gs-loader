@@ -18,3 +18,13 @@ Guiosoft Loader: Aplicação para carregamento e atualização de sistemas
 	- [ ] Registrar saídas inválidas
 	- [ ] Produzir estatísticas
 
+## Comandos
+
+### Executar sistema 
+
+gsloader.exe --run:pasta|arquivo de configuração
+
+### Verificar sistema
+
+gsloader.exe --verify:pasta|arquivo de configuração
+

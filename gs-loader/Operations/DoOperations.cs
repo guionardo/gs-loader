@@ -2,8 +2,10 @@
 using gs_loader.Forms;
 using gs_loader.Run;
 using gs_loader.Setup;
+using gs_loader.Stats;
 using System;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace gs_loader.Operations
@@ -59,15 +61,80 @@ Utilização: {exe} [opções]
 
         internal static Form Setup(string setupFile)
         {
-            SetupData _setupData;
             setupFile = SetupData.ParseFileName(setupFile);
             if (!File.Exists(setupFile))
                 SetupData.CreateEmptySetupFile(setupFile);
-            if (!SetupData.Read(setupFile, out _setupData, out string msg))
+            if (!SetupData.Read(setupFile, out SetupData _setupData, out string msg))
                 return null;
 
             return new SetupForm(_setupData);
         }
 
+        /// <summary>
+        /// Verifica os arquivos na pasta com os dados do SetupData
+        /// </summary>
+        /// <param name="setupFile"></param>
+        internal static void Verify(string setupFile)
+        {
+            setupFile = SetupData.ParseFileName(setupFile);
+            if (!File.Exists(setupFile))
+            {
+                //DONE: Gerar retorno quando o arquivo de setup não existir
+                Output.SingleMessage("Arquivo de setup inexistente [" + setupFile + "]", true, 1);
+                return;
+            }
+
+            if (!SetupData.Read(setupFile, out SetupData _setupData, out string msg))
+            {
+                //DONE: Gerar retorno quando o arquivo de setup não puder ser aberto
+                Output.SingleMessage("Arquivo de setup [" + setupFile + "]:\n" + msg, true, 1);
+                return;
+            }
+
+            if (SetupVerify.Verify(_setupData, Path.GetDirectoryName(setupFile), out msg))
+            {
+                //DONE: Gerar retorno quando os arquivos forem válidos
+                Output.SingleMessage("Setup do sistema é válido [" + setupFile + "]", false, 0);
+            }
+            else
+            {
+                //DONE: Gerar retorno quando os arquivos não forem válidos
+                Output.SingleMessage("Setup do sistema [" + setupFile + "]:\n" + msg, true, 1);
+            }
+
+        }
+
+        internal static void Stats(string setupFile)
+        {
+            setupFile = SetupData.ParseFileName(setupFile);
+            if (!File.Exists(setupFile))
+            {
+                //DONE: Gerar retorno quando o arquivo de setup não existir
+                Output.SingleMessage("Arquivo de setup inexistente [" + setupFile + "]", true, 1);
+                return;
+            }
+
+            if (!SetupData.Read(setupFile, out SetupData _setupData, out string msg))
+            {
+                //DONE: Gerar retorno quando o arquivo de setup não puder ser aberto
+                Output.SingleMessage("Arquivo de setup [" + setupFile + "]:\n" + msg, true, 1);
+                return;
+            }
+
+
+            System.Collections.Generic.List<ProcessInstance> processInstances = null;
+            if (DoStats.ListInstances(_setupData.Executable.File, ref processInstances))
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("Estatísticas: " + _setupData.Executable.File);
+                sb.AppendLine("Número de execuções: " + processInstances.Count);
+                foreach (var pi in processInstances)
+                {
+                    sb.AppendLine(pi.ToString());
+                }
+                Output.MultipleMessage(sb.ToString(), false, 0);
+            }
+
+        }
     }
 }

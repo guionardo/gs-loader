@@ -84,14 +84,15 @@ namespace gs_loader.Stats
 
                     processInstances = new List<ProcessInstance>();
                     processName = processName.ToUpperInvariant();
+
                     if (string.IsNullOrEmpty(version))
                     {
-                        var pi = instances.Find(x => x.Name == processName);
+                        var pi = instances.Find(x => x.Name.Equals(processName, StringComparison.InvariantCultureIgnoreCase));
                         processInstances.AddRange(pi);
                     }
                     else
                     {
-                        var pi = instances.Find(x => x.Name == processName && x.Version == version);
+                        var pi = instances.Find(x => x.Name.Equals(processName,StringComparison.InvariantCultureIgnoreCase) && x.Version == version);
                         processInstances.AddRange(pi);
                     }
 
