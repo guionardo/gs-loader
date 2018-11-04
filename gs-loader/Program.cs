@@ -26,9 +26,9 @@ namespace gs_loader
 
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                //args = new string[] { "--setup:C:\\TEMP" };
+                args = new string[] { "--setup:C:\\TEMP" };
                 //args = new string[] { "--verify:C:\\TEMP" };
-                args = new string[] { "--stats:C:\\TEMP"};
+                //args = new string[] { "--stats:C:\\TEMP"};
             }
 
 

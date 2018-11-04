@@ -38,6 +38,16 @@ namespace gs_loader.Forms
             txArguments.Text = setupData.Arguments;
 
             ParseFiles(Path.GetDirectoryName(setupData.SetupFile), setupData.Files);
+
+            foreach(var f in setupFiles)
+            {
+                var ext = Path.GetExtension(f.FileName).ToUpperInvariant();
+                if (ext==".EXE" || ext==".COM" || ext==".BAT" || ext == ".CMD")
+                {
+                    comboBox1.Items.Add(f.FileName);
+                }
+
+            }
         }
 
         private void ParseFiles(string setupPath, List<SetupFile> files)
@@ -77,10 +87,10 @@ namespace gs_loader.Forms
             for (i = 0; i < files.Count; i++)
             {
                 int k = -1;
-                for (int j = 0; j < setupFiles.Count; i++)
+                for (int j = 0; j < setupFiles.Count; j++)
                 {
-                    string setupFileName = setupFiles[i].FileName.Substring(setupPath.Length);
-                    //TODO: Revisar o loop em files[i] causando exceção
+                    string setupFileName = setupFiles[j].FileName.Substring(setupPath.Length);
+                    //DONE: Revisar o loop em files[i] causando exceção
                     if (setupFileName.Equals(Path.Combine(files[i].Folder, files[i].File), StringComparison.InvariantCultureIgnoreCase))
                     {
                         k = j;
@@ -119,7 +129,7 @@ namespace gs_loader.Forms
             switch (e.ColumnIndex)
             {
                 case 0: // Arquivo local
-                    e.Value = setupFileItem.FileName;
+                    e.Value = Path.GetFileName(setupFileItem.FileName);
                     break;
                 case 1: // Pasta
                     e.Value = setupFileItem.SetupFile == null ? "" : setupFileItem.SetupFile.Folder;
