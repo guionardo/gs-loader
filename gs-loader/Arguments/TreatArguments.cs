@@ -21,6 +21,11 @@ namespace gs_loader.Arguments
                 Operation = TypeOperation.Setup;
                 SetupFile = v;
             } },
+            {"i|install:", "Instalar sistema a partir do arquivo de configuração", v =>
+            {
+                Operation = TypeOperation.Install;
+                SetupFile = v;
+            } },
             {"r|run:","Executar sistema a partir do arquivo de configuração", v =>
             {
                 Operation = TypeOperation.Run;

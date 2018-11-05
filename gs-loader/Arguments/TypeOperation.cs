@@ -7,6 +7,7 @@
         Run = 2,
         Update = 3,
         Verify = 4,
-        Stats = 5
+        Stats = 5,
+        Install = 6
     }
 }
