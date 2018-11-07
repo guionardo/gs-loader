@@ -1,7 +1,7 @@
 ﻿using LiteDB;
 using System;
 
-namespace gs_loader.Stats
+namespace gs_loader_common.Stats
 {
     /// <summary>
     /// Registro de instância executada de um processo

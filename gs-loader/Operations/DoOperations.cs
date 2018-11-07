@@ -2,12 +2,11 @@
 using gs_loader_common.Forms;
 using gs_loader.Run;
 using gs_loader_common.Setup;
-using gs_loader.Stats;
+using gs_loader_common.Stats;
 using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using gs_loader.Forms;
 
 namespace gs_loader.Operations
 {

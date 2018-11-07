@@ -5,7 +5,7 @@ using gs_loader_common.Base;
 using gs_loader_common.Forms;
 using gs_loader.Run;
 using gs_loader_common.Setup;
-using gs_loader.Stats;
+using gs_loader_common.Stats;
 using gs_loader_common.Update;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

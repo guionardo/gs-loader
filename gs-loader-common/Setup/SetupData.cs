@@ -109,7 +109,8 @@ namespace gs_loader_common.Setup
             string path = Path.GetDirectoryName(executableFile);
             setupData = new SetupData
             {
-                Executable = new SetupFile(executableFile)
+                Executable = new SetupFile(executableFile),
+                SetupFile = Path.Combine(Path.GetDirectoryName(executableFile), DefaultFileName)
             };
 
             foreach (var f in files)

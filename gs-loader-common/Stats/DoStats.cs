@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-namespace gs_loader.Stats
+namespace gs_loader_common.Stats
 {
     /// <summary>
     /// Classe de acesso ao banco de dados

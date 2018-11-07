@@ -73,7 +73,7 @@ namespace gs_loader_common.Components
 
         private void cmbUpdateSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (cmbUpdateType.SelectedIndex)
+            switch (cmbUpdateSource.SelectedIndex)
             {
                 case 0:
                     lblAdress.Text = "Pasta";
@@ -85,6 +85,11 @@ namespace gs_loader_common.Components
                     lblAdress.Text = "HTTP";
                     break;
             }
+        }
+
+        private void cmbUpdateType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            chkOnceADay.Enabled = cmbUpdateType.SelectedIndex > 0;
         }
     }
 }

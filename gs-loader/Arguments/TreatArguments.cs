@@ -50,7 +50,6 @@ namespace gs_loader.Arguments
             {
                 gs_loader_common.Base.Output.NoGUI = true;
             }}
-
         };
 
         public static TypeOperation Operation { get; private set; }
