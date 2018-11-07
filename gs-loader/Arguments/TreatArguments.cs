@@ -48,7 +48,7 @@ namespace gs_loader.Arguments
             } },
             {"nogui","Informações de processamento via console", v=>
             {
-                Base.Output.NoGUI = true;
+                gs_loader_common.Base.Output.NoGUI = true;
             }}
 
         };

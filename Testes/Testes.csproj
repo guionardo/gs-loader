@@ -57,6 +57,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\gs-loader-common\gs-loader-common.csproj">
+      <Project>{e647818d-7516-4e7b-b69e-d271d0bbe6be}</Project>
+      <Name>gs-loader-common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\gs-loader\gs-loader.csproj">
       <Project>{1062F41D-B786-442F-9B1E-990DA76C8853}</Project>
       <Name>gs-loader</Name>

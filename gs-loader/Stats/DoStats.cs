@@ -1,4 +1,4 @@
-﻿using gs_loader.Base;
+﻿using gs_loader_common.Base;
 using LiteDB;
 using System;
 using System.Collections.Generic;
@@ -170,7 +170,7 @@ namespace gs_loader.Stats
                     ProcessInstanceId = new ObjectId((int)DateTime.Now.ToFileTime(), 0, (short)process.Id, r.Next()),
                     Name = Path.GetFileNameWithoutExtension(process.StartInfo.FileName).ToUpperInvariant(),
                     FileName = Path.Combine(process.StartInfo.WorkingDirectory, process.StartInfo.FileName),
-                    Version = Setup.Version.FromFile(Path.Combine(process.StartInfo.WorkingDirectory, process.StartInfo.FileName)).ToString(),
+                    Version = gs_loader_common.Setup.Version.FromFile(Path.Combine(process.StartInfo.WorkingDirectory, process.StartInfo.FileName)).ToString(),
                     StartTime = process.StartTime,
                     EndTime = process.ExitTime,
                     ExitCode = process.ExitCode

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using gs_loader.Arguments;
-using gs_loader.Base;
-using gs_loader.Forms;
+using gs_loader_common.Base;
+using gs_loader_common.Forms;
 using gs_loader.Run;
-using gs_loader.Setup;
+using gs_loader_common.Setup;
 using gs_loader.Stats;
-using gs_loader.Update;
+using gs_loader_common.Update;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Testes
@@ -74,9 +74,9 @@ namespace Testes
         [TestMethod]
         public void Versions()
         {
-            Assert.IsTrue(new gs_loader.Setup.Version("10.0.2.1").CompareTo("9.2.3.9") > 0);
-            Assert.IsTrue(new gs_loader.Setup.Version("10.0.2.1").CompareTo("11.2.3.9") < 0);
-            Assert.IsTrue(new gs_loader.Setup.Version("10.0.1.1").CompareTo("10.0.2.1") < 0);
+            Assert.IsTrue(new gs_loader_common.Setup.Version("10.0.2.1").CompareTo("9.2.3.9") > 0);
+            Assert.IsTrue(new gs_loader_common.Setup.Version("10.0.2.1").CompareTo("11.2.3.9") < 0);
+            Assert.IsTrue(new gs_loader_common.Setup.Version("10.0.1.1").CompareTo("10.0.2.1") < 0);
         }
 
         [TestMethod]

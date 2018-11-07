@@ -1,12 +1,13 @@
-﻿using gs_loader.Base;
-using gs_loader.Forms;
+﻿using gs_loader_common.Base;
+using gs_loader_common.Forms;
 using gs_loader.Run;
-using gs_loader.Setup;
+using gs_loader_common.Setup;
 using gs_loader.Stats;
 using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using gs_loader.Forms;
 
 namespace gs_loader.Operations
 {
@@ -133,6 +134,7 @@ Utilização: {exe} [opções]
                     sb.AppendLine(pi.ToString());
                 }
                 Output.MultipleMessage(sb.ToString(), false, 0);
+                Arguments.TreatArguments.OperationForm = OutputMultipleMessage.CurrentForm;
             }
 
         }

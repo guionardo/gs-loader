@@ -1,6 +1,6 @@
-﻿using gs_loader.Base;
-using gs_loader.Forms;
-using gs_loader.Setup;
+﻿using gs_loader_common.Base;
+using gs_loader_common.Forms;
+using gs_loader_common.Setup;
 using gs_loader.Stats;
 using System;
 using System.ComponentModel;
