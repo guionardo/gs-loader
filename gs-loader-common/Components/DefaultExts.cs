@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using gs_loader_common.Base;
+using System;
 using System.Windows.Forms;
 
 namespace gs_loader_common.Components
@@ -26,15 +26,15 @@ namespace gs_loader_common.Components
         /// </summary>
         public string[] Value
         {
-            get => GetUnique(txExts.Lines);
+            get => txExts.Lines.GetUnique();
             set
             {
                 if (value == null)
                     return;
                 if (InitialValue == null || InitialValue.Length == 0)
-                    InitialValue = CopyArray(value);
+                    InitialValue = (string[])value.Clone();
 
-                txExts.Lines = GetUnique(value);
+                txExts.Lines = value.GetUnique();
             }
         }
         private static string[] CopyArray(string[] origin)
@@ -65,43 +65,15 @@ namespace gs_loader_common.Components
             }
             else if (sender == miValidate)
             {
-                txExts.Lines = GetUnique(txExts.Lines);
+                txExts.Lines = txExts.Lines.GetUnique();
             }
         }
 
-        /// <summary>
-        /// Assegura que não existam itens duplicados
-        /// </summary>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        string[] GetUnique(string[] values)
-        {
-            List<string> listaV = new List<string>();
-            foreach (var lin in values)
-            {
-                string l = lin;
-                // Remove * e . do início da extensão
-                while (l.StartsWith(".") || l.StartsWith("*"))
-                    l = l.Substring(1);
 
-                l = "." + l;
-
-                bool found = false;
-                foreach (var i in listaV)
-                    if (l.Equals(i, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        found = true;
-                        break;
-                    }
-                if (!found)
-                    listaV.Add(l);
-            }
-            return listaV.ToArray();
-        }
 
         private void txExts_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            txExts.Lines = GetUnique(txExts.Lines);
+            txExts.Lines = txExts.Lines.GetUnique();
         }
     }
 }

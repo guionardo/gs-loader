@@ -41,7 +41,7 @@
             this.lblMsg.Name = "lblMsg";
             this.lblMsg.Size = new System.Drawing.Size(472, 232);
             this.lblMsg.TabIndex = 0;
-            this.lblMsg.Text = "label1";
+            this.lblMsg.Text = "WaitForm\r\nMúltiplas linhas";
             this.lblMsg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // WaitForm

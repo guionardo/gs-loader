@@ -20,6 +20,8 @@ namespace gs_loader_common.Forms
 
             if (!waitForm.Visible)
                 waitForm.Show();
+
+            waitForm.Refresh();
         }
 
         public static void Fechar()

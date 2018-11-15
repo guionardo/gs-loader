@@ -4,13 +4,8 @@ using gs_loader_common.Setup;
 using gs_loader_common.Update;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace gs_loader_setup
@@ -19,7 +14,8 @@ namespace gs_loader_setup
     {
         private string _lastSelectedPath = Directory.GetCurrentDirectory();
 
-        List<SetupFileItem> setupFiles = new List<SetupFileItem>();
+        SetupData setupData = new SetupData();
+        //List<SetupFileItem> setupFiles = new List<SetupFileItem>();
 
         string SetupPath = "";
         string SetupFile = "";
@@ -28,9 +24,11 @@ namespace gs_loader_setup
         {
             InitializeComponent();
 
+            ignoreExts.DefaultValues = SetupData.DefaultIgnoredExtensions;
+            includeExt.DefaultValues = SetupData.DefaultExtensions;
+
             if (setupData == null)  // Sem arquivo de setup informado
                 return;
-
             Read(setupData);
 
         }
@@ -92,25 +90,22 @@ namespace gs_loader_setup
 
         private void ArquivoGravar()
         {
+
+            if (cmbExecutable.SelectedItem == null)
+            {
+                Dialog.Error("Você não selecionou um executável para o setup!");
+                return;
+            }
             if (!Dialog.YesNo("Deseja gravar o arquivo de setup em " + lblOriginFolder.Text + "?"))
                 return;
-            SetupData setup = new SetupData()
-            {
-                Executable = new SetupFile(cmbExecutable.SelectedValue.ToString()),
-                Arguments = txArguments.Text,
-                IgnoredExtensions = ignoreExts.Value,
-                IncludeExtensions = includeExts.Value,
-                JustOneInstance = chkJustOneInstance.Checked,
-                UpdateSource = (UpdateSource)editUpdateSource.UpdateSource.Clone(),
-                UpdateType = editUpdateSource.UpdateType,
-                Files = new List<SetupFile>()
-            };
-            foreach (var f in setupFiles)
-            {
-                if (f.Include)
-                    setup.Files.Add(f.SetupFile);
-            }
-            if (SetupData.Write(lblOriginFolder.Text, setup, out string message))
+            setupData.Arguments = txArguments.Text;
+            setupData.IgnoredExtensions = ignoreExts.Value;
+            setupData.IncludeExtensions = includeExt.Value;
+            setupData.JustOneInstance = chkJustOneInstance.Checked;
+            setupData.UpdateSource = (UpdateSource)editUpdateSource.UpdateSource.Clone();
+            setupData.UpdateType = editUpdateSource.UpdateType;
+
+            if (SetupData.Write(lblOriginFolder.Text, setupData, out string message))
             {
                 Dialog.Message("Dados gravados em " + lblOriginFolder.Text + "\n\n" + message);
             }
@@ -119,87 +114,6 @@ namespace gs_loader_setup
                 Dialog.Error("Erro ao gravar em " + lblOriginFolder.Text + "\n\n" + message);
             }
 
-        }
-
-        private void ParseFiles(string setupPath, List<SetupFile> files)
-        {
-            setupFiles.Clear();
-
-            var f = Directory.GetFiles(setupPath, "*.*", SearchOption.AllDirectories).ToList();
-
-            // Remove arquivos com extensões ignoradas
-            int i = 0;
-            while (i < f.Count())
-            {
-                string ext = Path.GetExtension(f[i]);
-                if (Extensions.Contains(ignoreExts.Value, ext))
-                    f.RemoveAt(i);
-                else i++;
-            }
-
-            // Adiciona arquivos existentes na pasta
-            for (i = 0; i < f.Count; i++)
-            {
-                SetupFileState fileState = SetupFileState.OnFolderUnselected;
-                // Verifica se a extensão não faz parte da lista de extensões requeridas
-                if (Extensions.Contains(includeExts.Value, Path.GetExtension(f[i])))
-                    fileState = SetupFileState.OnFolder;
-
-                setupFiles.Add(new SetupFileItem
-                {
-                    FileName = f[i],
-                    State = fileState,
-                    SetupFile = new SetupFile(f[i], setupPath),
-                    Include = fileState == SetupFileState.OnFolder
-                });
-            }
-
-            // Adiciona arquivos do setup
-         /*   foreach (var file in files)
-            {
-                foreach (var fileItem in setupFiles)
-                {
-                    if (fileItem.FileName)
-                }
-            }
-            */
-            for (var iFiles = 0; iFiles < files.Count; iFiles++)
-            {
-                int k = -1;
-                for (int j = 0; j < setupFiles.Count; j++)
-                {
-                    string setupFileName = setupFiles[j].FileName.Substring(setupPath.Length+1);
-                    //DONE: Revisar o loop em files[i] causando exceção
-                    if (setupFileName.Equals(Path.Combine(files[iFiles].Folder, files[iFiles].File), StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        k = j;
-                        break;
-                    }
-                }
-                if (k == -1)
-                {
-                    // Não existe na lista atual
-                    setupFiles.Add(new SetupFileItem
-                    {
-                        FileName = Path.Combine(setupPath, files[iFiles].Folder, files[iFiles].File),
-                        SetupFile = new SetupFile(Path.Combine(setupPath, files[iFiles].Folder, files[iFiles].File)),
-                        State = SetupFileState.OnSetup
-                    });
-                }
-                else
-                {
-                    // Atualiza a lista
-                    setupFiles[k].State = SetupFileState.Synced;
-                    setupFiles[k].Include = true;
-                }
-            }
-
-            // Ordena a lista
-            //setupFiles.Sort((x, y) => x.FileName.CompareTo(y.FileName));
-
-            setupFiles.Sort((x, y) => x.CompareTo(y));
-
-            dgvFiles.RowCount = setupFiles.Count;
         }
 
         private void Read(SetupData setupData)
@@ -234,44 +148,71 @@ namespace gs_loader_setup
             #endregion
 
             #region Extensões
-            includeExts.Value = setupData.IncludeExtensions;
+            includeExt.Value = setupData.IncludeExtensions;
             ignoreExts.Value = setupData.IgnoredExtensions;
             #endregion
 
-            ParseFiles(setupFolder, setupData.Files);
+            setupData.Files.AddFilesFromFolder(setupFolder);
+            dgvFiles.RowCount = setupData.Files.Count;
         }
 
         private void DGV_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0 || e.RowIndex >= setupFiles.Count || e.ColumnIndex != 5)
+            if (e.RowIndex < 0 || e.RowIndex >= setupData.Files.Count)
                 return;
-            setupFiles[e.RowIndex].Include = !setupFiles[e.RowIndex].Include;
+            switch (e.ColumnIndex)
+            {
+                case 5:
+                    setupData.Files[e.RowIndex].Include = !setupData.Files[e.RowIndex].Include;
+                    break;
+                case 6:
+                    setupData.Files[e.RowIndex].Executable = !setupData.Files[e.RowIndex].Executable;
+
+                    if (setupData.Files[e.RowIndex].Executable)
+                    {
+                        if (!IO.IsExecutable(setupData.Files[e.RowIndex].File))
+                        {
+                            setupData.Files[e.RowIndex].Executable = false;
+                            Dialog.Error("O arquivo " + setupData.Files[e.RowIndex].File + " não é do tipo executável!");
+                        }
+                        else
+                            for (int i = 0; i < setupData.Files.Count; i++)
+                                if (i != e.RowIndex)
+                                    setupData.Files[i].Executable = false;
+                        dgvFiles.Refresh();
+                    }
+                    break;
+            }
+
         }
 
         private void DGB_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
         {
-            if (e.RowIndex < 0 || e.RowIndex >= setupFiles.Count)
+            if (e.RowIndex < 0 || e.RowIndex >= setupData.Files.Count)
                 return;
-            SetupFileItem setupFileItem = setupFiles[e.RowIndex];
+            SetupFile setupFileItem = setupData.Files[e.RowIndex];
             switch (e.ColumnIndex)
             {
                 case 0: // Arquivo local
-                    e.Value = Path.GetFileName(setupFileItem.FileName);
+                    e.Value = Path.GetFileName(setupFileItem.File);
                     break;
                 case 1: // Pasta
-                    e.Value = setupFileItem.SetupFile == null ? "" : setupFileItem.SetupFile.Folder;
+                    e.Value = setupFileItem.Folder;
                     break;
                 case 2: // Estado
                     e.Value = setupFileItem.State;
                     break;
                 case 3: // Tamanho
-                    e.Value = setupFileItem.SetupFile.Size;
+                    e.Value = setupFileItem.Size;
                     break;
                 case 4: // MD-5
-                    e.Value = setupFileItem.SetupFile.MD5;
+                    e.Value = setupFileItem.MD5;
                     break;
                 case 5: // Incluir
                     e.Value = setupFileItem.Include;
+                    break;
+                case 6: // Executável
+                    e.Value = setupFileItem.Executable;
                     break;
             }
         }
@@ -288,6 +229,14 @@ namespace gs_loader_setup
         {
             //TODO: Gerar arquivos de distribuição
             throw new NotImplementedException();
+        }
+
+        private void DGVFiles_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dgvFiles.IsCurrentCellDirty)
+            {
+                dgvFiles.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
         }
     }
 }

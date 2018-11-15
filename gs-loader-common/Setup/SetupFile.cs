@@ -1,21 +1,15 @@
 ﻿using gs_loader_common.Base;
+using gs_loader_common.Interfaces;
 using System;
 using System.Diagnostics;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace gs_loader_common.Setup
 {
-    public class SetupFile : ICloneable
+    public class SetupFile : ICloneable, IAssignable, IComparable
     {
-        public string File { get; set; }
-        public Version Version { get; set; }
-        public string Description { get; set; }
-        public string MD5 { get; set; }
-        public long Size { get; set; }
-        public DateTime CreationTime { get; set; }
-        public string Folder { get; set; }
-
-        private SetupFile() { }
+        private bool _executable;
 
         public SetupFile(string fileName, string baseFolder = null)
         {
@@ -57,6 +51,76 @@ namespace gs_loader_common.Setup
             }
         }
 
+        private SetupFile() { }
+
+        public DateTime CreationTime { get; set; }
+
+        /// <summary>
+        /// Descrição
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Arquivo executável principal do setup
+        /// </summary>
+        public bool Executable
+        {
+            get { return _executable; }
+            set
+            {
+                if (value && !IO.IsExecutable(File)) return;
+                _executable = value;
+            }
+        }
+
+        /// <summary>
+        /// Nome do arquivo
+        /// </summary>
+        public string File { get; set; }
+
+        public string Folder { get; set; }
+
+        /// <summary>
+        /// Propriedade utilizada para selecionar na grid de setup
+        /// </summary>
+        [JsonIgnore]
+        public bool Include { get; set; }
+
+        /// <summary>
+        /// MD5
+        /// </summary>
+        public string MD5 { get; set; }
+
+        public long Size { get; set; }
+
+        /// <summary>
+        /// Propriedade utilizada para identificar o estado do arquivo na grid de setup
+        /// </summary>
+        [JsonIgnore]
+        public SetupFileState State { get; set; }
+        /// <summary>
+        /// Versão
+        /// </summary>
+        public Version Version { get; set; }
+
+        public bool Assign(object value)
+        {
+            if (value is SetupFile)
+            {
+                SetupFile v = (SetupFile)value;
+                File = v.File;
+                Version = (Version)v.Version.Clone();
+                Description = v.Description;
+                MD5 = v.MD5;
+                Size = v.Size;
+                CreationTime = v.CreationTime;
+                Folder = v.Folder;
+                Executable = v.Executable;
+                return true;
+            }
+            return false;
+        }
+
         public object Clone() => new SetupFile
         {
             File = File,
@@ -65,13 +129,38 @@ namespace gs_loader_common.Setup
             MD5 = MD5,
             Size = Size,
             CreationTime = CreationTime,
-            Folder = Folder
+            Folder = Folder,
+            Executable = Executable
         };
 
+        public int CompareTo(object obj)
+        {
+            var o = (SetupFile)obj;
+
+            int r = Folder.CompareTo(o.Folder);
+            if (r == 0)
+            {
+                r = ExtCompare(Path.GetExtension(File), Path.GetExtension(o.File));
+                if (r == 0)
+                    r = File.CompareTo(o.File);
+            }
+
+            return r;
+        }
+
+        public int ExtCompare(string ext1, string ext2)
+        {
+            ext1 = (ext1 ?? "").ToUpperInvariant();
+            ext2 = (ext2 ?? "").ToUpperInvariant();
+            if (IO.IsExecutableExtension(ext1) && IO.IsExecutableExtension(ext2))
+                return 0;
+            if (IO.IsExecutableExtension(ext1) && !IO.IsExecutableExtension(ext2))
+                return -1;
+            if (!IO.IsExecutableExtension(ext1) && IO.IsExecutableExtension(ext2))
+                return 1;
+            return ext1.CompareTo(ext2);
+        }
         public override string ToString() => (Folder ?? "NOFOLDER") + Path.DirectorySeparatorChar + (File ?? "NOFILE");
-
-
-
 
     }
 }

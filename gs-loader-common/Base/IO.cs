@@ -6,9 +6,11 @@ namespace gs_loader_common.Base
 {
     public class IO
     {
-        public static string LastError { get; private set; }
-
         static readonly string _cacheFolder;
+        /// <summary>
+        /// Extensões de arquivos executáveis
+        /// </summary>
+        static readonly string[] executableExtensions = new string[] { "exe", "cmd", "bat", "com" };
 
         static IO()
         {
@@ -23,25 +25,7 @@ namespace gs_loader_common.Base
             }
         }
 
-        /// <summary>
-        /// Pasta de cache para o update
-        /// </summary>
-        /// <param name="setupData"></param>
-        /// <param name="includeVersion"></param>
-        /// <returns></returns>
-        public static string CacheFolder(SetupData setupData, bool includeVersion)
-        {
-            if (setupData == null || setupData.Executable == null || string.IsNullOrEmpty(setupData.Executable.File))
-                return "";
-
-            string cacheFolder = Path.Combine(
-                _cacheFolder,
-                Math.Abs(setupData.Executable.File.ToUpperInvariant().GetHashCode()).ToString());
-            if (includeVersion)
-                cacheFolder = Path.Combine(cacheFolder, setupData.Executable.Version.ToString());
-            return cacheFolder;
-        }
-
+        public static string LastError { get; private set; }
         /// <summary>
         /// Pasta de backup para as versões atualizadas
         /// </summary>
@@ -64,6 +48,56 @@ namespace gs_loader_common.Base
         }
 
         /// <summary>
+        /// Pasta de cache para o update
+        /// </summary>
+        /// <param name="setupData"></param>
+        /// <param name="includeVersion"></param>
+        /// <returns></returns>
+        public static string CacheFolder(SetupData setupData, bool includeVersion)
+        {
+            if (setupData == null || setupData.Executable == null || string.IsNullOrEmpty(setupData.Executable.File))
+                return "";
+
+            string cacheFolder = Path.Combine(
+                _cacheFolder,
+                Math.Abs(setupData.Executable.File.ToUpperInvariant().GetHashCode()).ToString());
+            if (includeVersion)
+                cacheFolder = Path.Combine(cacheFolder, setupData.Executable.Version.ToString());
+            return cacheFolder;
+        }
+        /// <summary>
+        /// Identifica um arquivo executável pela sua extensão
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static bool IsExecutable(string fileName)
+        {
+            if (!string.IsNullOrEmpty(fileName))
+                foreach (var ext in executableExtensions)
+                    if (Path.GetExtension(fileName).Equals("." + ext, StringComparison.InvariantCultureIgnoreCase))
+                        return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Identifica se uma extensão é de um arquivo executável
+        /// </summary>
+        /// <param name="extension"></param>
+        /// <returns></returns>
+        public static bool IsExecutableExtension(string extension)
+        {
+            if (!string.IsNullOrEmpty(extension))
+            {
+                if (!extension.StartsWith("."))
+                    extension = "." + extension.ToLowerInvariant();
+                foreach (var ext in executableExtensions)
+                    if (ext.Equals(extension))
+                        return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Verifica/cria pasta
         /// </summary>
         /// <param name="folderName"></param>
@@ -81,6 +115,26 @@ namespace gs_loader_common.Base
             }
             catch (Exception e) { LastError = e.Message; }
             return Directory.Exists(folderName);
+        }
+
+        public static string MD5(string fileName)
+        {
+            if (!File.Exists(fileName))
+                return "";
+            try
+            {
+                var md5 = System.Security.Cryptography.MD5.Create();
+                var bytes = md5.ComputeHash(File.ReadAllBytes(fileName));
+                string hash = "";
+                foreach (var b in bytes)
+                    hash += b.ToString("X2").ToLower();
+                return hash;
+            }
+            catch
+            {
+                return "";
+            }
+
         }
 
         /// <summary>
@@ -126,26 +180,6 @@ namespace gs_loader_common.Base
                 LastError = e.Message;
             }
             return File.Exists(destiny) && string.IsNullOrEmpty(LastError);
-        }
-
-        public static string MD5(string fileName)
-        {
-            if (!File.Exists(fileName))
-                return "";
-            try
-            {
-                var md5 = System.Security.Cryptography.MD5.Create();
-                var bytes = md5.ComputeHash(File.ReadAllBytes(fileName));
-                string hash = "";
-                foreach (var b in bytes)
-                    hash += b.ToString("X2").ToLower();
-                return hash;
-            }
-            catch
-            {
-                return "";
-            }
-
         }
     }
 }

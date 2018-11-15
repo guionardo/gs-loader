@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using gs_loader_common.Base;
 using gs_loader_common.Update;
 using Newtonsoft.Json;
 
@@ -36,7 +37,40 @@ namespace gs_loader_common.Setup
         /// <summary>
         /// Executável 
         /// </summary>
-        public SetupFile Executable { get; set; }
+        [JsonIgnore]
+        public SetupFile Executable
+        {
+            get
+            {
+                foreach (var f in Files)
+                    if (f.Executable)
+                        return f;
+                // Não encontrou nenhum executável definido. Procurará pelo primeiro executável
+                for (int i = 0; i < Files.Count; i++)
+                    if (string.IsNullOrEmpty(Files[i].Folder) && IO.IsExecutable(Files[i].File))
+                    {
+                        Files[i].Executable = true;
+                        return Files[i];
+                    }
+
+                return null;
+            }
+            set
+            {
+                if (!IO.IsExecutable(value.File))
+                    return;
+                value.Executable = true;
+                for (int i = 0; i < Files.Count; i++) Files[i].Executable = false;
+                for (int i = 0; i < Files.Count; i++)
+                    if (Files[i].File.Equals(value.File, StringComparison.InvariantCultureIgnoreCase) &&
+                        Files[i].Folder.Equals(value.Folder, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        Files[i].Assign(value);
+                        return;
+                    }
+                Files.Add(value);
+            }
+        }
 
         /// <summary>
         /// Arquivos que farão parte do setup
@@ -211,7 +245,13 @@ namespace gs_loader_common.Setup
             }
             try
             {
-                string json = JsonConvert.SerializeObject(setupData, Formatting.Indented);
+                SetupData clone = (SetupData)setupData.Clone();
+                clone.Files.Clear();
+                foreach (var f in setupData.Files)
+                    if (f.Include)
+                        clone.Files.Add(f);
+
+                string json = JsonConvert.SerializeObject(clone, Formatting.Indented);
                 File.WriteAllText(fileName, json);
                 message = "OK";
                 return true;

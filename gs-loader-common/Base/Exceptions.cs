@@ -6,11 +6,6 @@ namespace gs_loader_common.Base
     {
         const string exc = "Except";
 
-        public static void Install()
-        {
-            AppDomain.CurrentDomain.UnhandledException += HandleUnhandledException;
-        }
-
         public static void HandleThreadException(Exception exception)
         {
             TratarExceção(exception, "ThreadException");
@@ -21,15 +16,12 @@ namespace gs_loader_common.Base
             TratarExceção(e.ExceptionObject as Exception, "UnhandledException" + (e.IsTerminating ? ": TERMINATING" : ""));
         }
 
-        private static void TratarExceção(Exception e, string mensagemExtra)
-        {
-            string msg = $"{mensagemExtra}\n\nOcorreu uma exceção inesperada no sistema!\n\n{e.GetType()}\n{e.Message}\n";
-            if (e.InnerException != null)
-                msg = msg + $"Exceção interna: {e.InnerException.GetType()}:{e.InnerException.Message}\n";
-            LogExcecao(e, exc, mensagemExtra);
-            Dialog.Error(msg);
-        }
+        
 
+        public static void Install()
+        {
+            AppDomain.CurrentDomain.UnhandledException += HandleUnhandledException;
+        }
         /// <summary>
         /// Registra informações de uma exceção no log
         /// </summary>
@@ -53,6 +45,17 @@ namespace gs_loader_common.Base
                 e = e.InnerException;
             }
             Log.Add("***", bloco);
+        }
+
+     
+
+        private static void TratarExceção(Exception e, string mensagemExtra)
+        {
+            string msg = $"{mensagemExtra}\n\nOcorreu uma exceção inesperada no sistema!\n\n{e.GetType()}\n{e.Message}\n";
+            if (e.InnerException != null)
+                msg = msg + $"Exceção interna: {e.InnerException.GetType()}:{e.InnerException.Message}\n";
+            LogExcecao(e, exc, mensagemExtra);
+            Dialog.Error(msg);
         }
     }
 }
