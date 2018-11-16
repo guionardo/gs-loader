@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             gs_loader_common.Update.UpdateSource updateSource2 = new gs_loader_common.Update.UpdateSource();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -35,9 +36,9 @@
             this.miArquivoNovo = new System.Windows.Forms.ToolStripMenuItem();
             this.miArquivoAbrir = new System.Windows.Forms.ToolStripMenuItem();
             this.miArquivoSalvar = new System.Windows.Forms.ToolStripMenuItem();
+            this.miArquivosUltimos = new System.Windows.Forms.ToolStripMenuItem();
             this.distribuiçãoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.miDistribuicaoGerar = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmbExecutable = new System.Windows.Forms.ComboBox();
             this.txArguments = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.gbExecutable = new System.Windows.Forms.GroupBox();
@@ -52,17 +53,25 @@
             this.clnInclude = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.clnExecutable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.gbIgnExts = new System.Windows.Forms.GroupBox();
+            this.ignoreExts = new gs_loader_common.Components.ExtensionsEdit();
             this.gbIncExts = new System.Windows.Forms.GroupBox();
+            this.includeExt = new gs_loader_common.Components.ExtensionsEdit();
             this.tlp = new System.Windows.Forms.TableLayoutPanel();
             this.editUpdateSource = new gs_loader_common.Components.EditUpdateSource();
-            this.ignoreExts = new gs_loader_common.Components.ExtensionsEdit();
-            this.includeExt = new gs_loader_common.Components.ExtensionsEdit();
+            this.cmGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmGridMarcar = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmGridDesmarcar = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmGridMarcarPasta = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmGridDesmarcarPasta = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmGridMarcarExtensao = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmGridDesmarcarExtensao = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.gbExecutable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             this.gbIgnExts.SuspendLayout();
             this.gbIncExts.SuspendLayout();
             this.tlp.SuspendLayout();
+            this.cmGrid.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -81,7 +90,8 @@
             this.miArquivo.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miArquivoNovo,
             this.miArquivoAbrir,
-            this.miArquivoSalvar});
+            this.miArquivoSalvar,
+            this.miArquivosUltimos});
             this.miArquivo.Name = "miArquivo";
             this.miArquivo.Size = new System.Drawing.Size(61, 20);
             this.miArquivo.Text = "Arquivo";
@@ -89,14 +99,14 @@
             // miArquivoNovo
             // 
             this.miArquivoNovo.Name = "miArquivoNovo";
-            this.miArquivoNovo.Size = new System.Drawing.Size(105, 22);
+            this.miArquivoNovo.Size = new System.Drawing.Size(165, 22);
             this.miArquivoNovo.Text = "Novo";
             this.miArquivoNovo.Click += new System.EventHandler(this.MenuArquivoClick);
             // 
             // miArquivoAbrir
             // 
             this.miArquivoAbrir.Name = "miArquivoAbrir";
-            this.miArquivoAbrir.Size = new System.Drawing.Size(105, 22);
+            this.miArquivoAbrir.Size = new System.Drawing.Size(165, 22);
             this.miArquivoAbrir.Text = "Abrir";
             this.miArquivoAbrir.Click += new System.EventHandler(this.MenuArquivoClick);
             // 
@@ -104,9 +114,15 @@
             // 
             this.miArquivoSalvar.Enabled = false;
             this.miArquivoSalvar.Name = "miArquivoSalvar";
-            this.miArquivoSalvar.Size = new System.Drawing.Size(105, 22);
+            this.miArquivoSalvar.Size = new System.Drawing.Size(165, 22);
             this.miArquivoSalvar.Text = "Salvar";
             this.miArquivoSalvar.Click += new System.EventHandler(this.MenuArquivoClick);
+            // 
+            // miArquivosUltimos
+            // 
+            this.miArquivosUltimos.Name = "miArquivosUltimos";
+            this.miArquivosUltimos.Size = new System.Drawing.Size(165, 22);
+            this.miArquivosUltimos.Text = "Últimos Arquivos";
             // 
             // distribuiçãoToolStripMenuItem
             // 
@@ -122,17 +138,6 @@
             this.miDistribuicaoGerar.Size = new System.Drawing.Size(150, 22);
             this.miDistribuicaoGerar.Text = "Gerar arquivos";
             this.miDistribuicaoGerar.Click += new System.EventHandler(this.MenuDistribuicaoClick);
-            // 
-            // cmbExecutable
-            // 
-            this.cmbExecutable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbExecutable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbExecutable.FormattingEnabled = true;
-            this.cmbExecutable.Location = new System.Drawing.Point(9, 18);
-            this.cmbExecutable.Name = "cmbExecutable";
-            this.cmbExecutable.Size = new System.Drawing.Size(379, 21);
-            this.cmbExecutable.TabIndex = 5;
             // 
             // txArguments
             // 
@@ -154,7 +159,6 @@
             // 
             // gbExecutable
             // 
-            this.gbExecutable.Controls.Add(this.cmbExecutable);
             this.gbExecutable.Controls.Add(this.txArguments);
             this.gbExecutable.Controls.Add(this.label1);
             this.gbExecutable.Controls.Add(this.chkJustOneInstance);
@@ -202,6 +206,7 @@
             this.clnInclude,
             this.clnExecutable});
             this.tlp.SetColumnSpan(this.dgvFiles, 2);
+            this.dgvFiles.ContextMenuStrip = this.cmGrid;
             this.dgvFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvFiles.Location = new System.Drawing.Point(3, 23);
             this.dgvFiles.Name = "dgvFiles";
@@ -209,6 +214,7 @@
             this.dgvFiles.Size = new System.Drawing.Size(794, 130);
             this.dgvFiles.TabIndex = 3;
             this.dgvFiles.VirtualMode = true;
+            this.dgvFiles.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvFiles_CellMouseDown);
             this.dgvFiles.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_CellValueChanged);
             this.dgvFiles.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.DGB_CellValueNeeded);
             this.dgvFiles.CurrentCellDirtyStateChanged += new System.EventHandler(this.DGVFiles_CurrentCellDirtyStateChanged);
@@ -275,6 +281,16 @@
             this.gbIgnExts.TabStop = false;
             this.gbIgnExts.Text = "Extensões Ignoradas";
             // 
+            // ignoreExts
+            // 
+            this.ignoreExts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ignoreExts.Location = new System.Drawing.Point(3, 16);
+            this.ignoreExts.Name = "ignoreExts";
+            this.ignoreExts.Padding = new System.Windows.Forms.Padding(2);
+            this.ignoreExts.Size = new System.Drawing.Size(388, 45);
+            this.ignoreExts.TabIndex = 0;
+            this.ignoreExts.Value = new string[0];
+            // 
             // gbIncExts
             // 
             this.gbIncExts.Controls.Add(this.includeExt);
@@ -285,6 +301,16 @@
             this.gbIncExts.TabIndex = 0;
             this.gbIncExts.TabStop = false;
             this.gbIncExts.Text = "Extensões Padrão";
+            // 
+            // includeExt
+            // 
+            this.includeExt.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.includeExt.Location = new System.Drawing.Point(3, 16);
+            this.includeExt.Name = "includeExt";
+            this.includeExt.Padding = new System.Windows.Forms.Padding(2);
+            this.includeExt.Size = new System.Drawing.Size(388, 45);
+            this.includeExt.TabIndex = 0;
+            this.includeExt.Value = new string[0];
             // 
             // tlp
             // 
@@ -322,25 +348,60 @@
             this.editUpdateSource.UpdateSource = updateSource2;
             this.editUpdateSource.UpdateType = gs_loader_common.Update.UpdateType.None;
             // 
-            // ignoreExts
+            // cmGrid
             // 
-            this.ignoreExts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ignoreExts.Location = new System.Drawing.Point(3, 16);
-            this.ignoreExts.Name = "ignoreExts";
-            this.ignoreExts.Padding = new System.Windows.Forms.Padding(2);
-            this.ignoreExts.Size = new System.Drawing.Size(388, 45);
-            this.ignoreExts.TabIndex = 0;
-            this.ignoreExts.Value = new string[0];
+            this.cmGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmGridMarcar,
+            this.cmGridDesmarcar});
+            this.cmGrid.Name = "cmGrid";
+            this.cmGrid.Size = new System.Drawing.Size(131, 48);
+            this.cmGrid.Opening += new System.ComponentModel.CancelEventHandler(this.cmGrid_Opening);
             // 
-            // includeExt
+            // cmGridMarcar
             // 
-            this.includeExt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.includeExt.Location = new System.Drawing.Point(3, 16);
-            this.includeExt.Name = "includeExt";
-            this.includeExt.Padding = new System.Windows.Forms.Padding(2);
-            this.includeExt.Size = new System.Drawing.Size(388, 45);
-            this.includeExt.TabIndex = 0;
-            this.includeExt.Value = new string[0];
+            this.cmGridMarcar.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmGridMarcarPasta,
+            this.cmGridMarcarExtensao});
+            this.cmGridMarcar.Name = "cmGridMarcar";
+            this.cmGridMarcar.Size = new System.Drawing.Size(180, 22);
+            this.cmGridMarcar.Text = "Marcar";
+            // 
+            // cmGridDesmarcar
+            // 
+            this.cmGridDesmarcar.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmGridDesmarcarPasta,
+            this.cmGridDesmarcarExtensao});
+            this.cmGridDesmarcar.Name = "cmGridDesmarcar";
+            this.cmGridDesmarcar.Size = new System.Drawing.Size(180, 22);
+            this.cmGridDesmarcar.Text = "Desmarcar";
+            // 
+            // cmGridMarcarPasta
+            // 
+            this.cmGridMarcarPasta.Name = "cmGridMarcarPasta";
+            this.cmGridMarcarPasta.Size = new System.Drawing.Size(243, 22);
+            this.cmGridMarcarPasta.Text = "Todos da pasta %";
+            this.cmGridMarcarPasta.Click += new System.EventHandler(this.GridMenuClick);
+            // 
+            // cmGridDesmarcarPasta
+            // 
+            this.cmGridDesmarcarPasta.Name = "cmGridDesmarcarPasta";
+            this.cmGridDesmarcarPasta.Size = new System.Drawing.Size(243, 22);
+            this.cmGridDesmarcarPasta.Text = "Todos da pasta %";
+            this.cmGridDesmarcarPasta.Click += new System.EventHandler(this.GridMenuClick);
+            // 
+            // cmGridMarcarExtensao
+            // 
+            this.cmGridMarcarExtensao.Name = "cmGridMarcarExtensao";
+            this.cmGridMarcarExtensao.Size = new System.Drawing.Size(243, 22);
+            this.cmGridMarcarExtensao.Text = "Todos arquivos com extensão %";
+            this.cmGridMarcarExtensao.Click += new System.EventHandler(this.GridMenuClick);
+            // 
+            // cmGridDesmarcarExtensao
+            // 
+            this.cmGridDesmarcarExtensao.Name = "cmGridDesmarcarExtensao";
+            this.cmGridDesmarcarExtensao.Size = new System.Drawing.Size(243, 22);
+            this.cmGridDesmarcarExtensao.Text = "Todos arquivos com extensão %";
+            this.cmGridDesmarcarExtensao.Click += new System.EventHandler(this.GridMenuClick);
             // 
             // MainForm
             // 
@@ -361,6 +422,7 @@
             this.gbIncExts.ResumeLayout(false);
             this.tlp.ResumeLayout(false);
             this.tlp.PerformLayout();
+            this.cmGrid.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -374,7 +436,6 @@
         private System.Windows.Forms.ToolStripMenuItem miArquivoSalvar;
         private System.Windows.Forms.ToolStripMenuItem miArquivoNovo;
         private gs_loader_common.Components.EditUpdateSource editUpdateSource;
-        private System.Windows.Forms.ComboBox cmbExecutable;
         private System.Windows.Forms.TextBox txArguments;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox gbExecutable;
@@ -395,6 +456,14 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn clnExecutable;
         private gs_loader_common.Components.ExtensionsEdit ignoreExts;
         private gs_loader_common.Components.ExtensionsEdit includeExt;
+        private System.Windows.Forms.ToolStripMenuItem miArquivosUltimos;
+        private System.Windows.Forms.ContextMenuStrip cmGrid;
+        private System.Windows.Forms.ToolStripMenuItem cmGridMarcar;
+        private System.Windows.Forms.ToolStripMenuItem cmGridMarcarPasta;
+        private System.Windows.Forms.ToolStripMenuItem cmGridDesmarcar;
+        private System.Windows.Forms.ToolStripMenuItem cmGridDesmarcarPasta;
+        private System.Windows.Forms.ToolStripMenuItem cmGridMarcarExtensao;
+        private System.Windows.Forms.ToolStripMenuItem cmGridDesmarcarExtensao;
     }
 }
 

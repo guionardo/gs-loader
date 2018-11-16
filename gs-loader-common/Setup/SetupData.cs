@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using gs_loader_common.Base;
+using gs_loader_common.Telemetry;
 using gs_loader_common.Update;
 using Newtonsoft.Json;
 
@@ -19,16 +20,15 @@ namespace gs_loader_common.Setup
         /// <summary>
         /// Extensões padrão para criação de SetupData a partir de diretório ou executável
         /// </summary>
-        public static readonly string[] DefaultExtensions = new string[] { "*.exe", "*.dll" };
+        public static readonly string[] DefaultExtensions = new string[] { ".exe", ".dll" };
 
         /// <summary>
         /// Extensões padrão para ignorar
         /// </summary>
-        public static readonly string[] DefaultIgnoredExtensions = new string[] { "*.bak", "*.tmp", "*.obj", "*.xml" };
+        public static readonly string[] DefaultIgnoredExtensions = new string[] { ".bak", ".tmp", ".obj", ".xml" };
 
-        public string[] IncludeExtensions = DefaultExtensions;
         public string[] IgnoredExtensions = DefaultIgnoredExtensions;
-
+        public string[] IncludeExtensions = DefaultExtensions;
         /// <summary>
         /// Argumentos utilizados na linha de comando do executável
         /// </summary>
@@ -77,17 +77,23 @@ namespace gs_loader_common.Setup
         /// </summary>
         public List<SetupFile> Files { get; set; } = new List<SetupFile>();
 
+        public string HashString
+        {
+            get
+            {
+                {
+                    string hash = "";
+                    foreach (var f in Files)
+                        hash += f.HashString();
+                    return IO.MD5FromString(hash);
+                }
+            }
+        }
+
         /// <summary>
         /// Indica que somente uma instância pode ser executada por vez
         /// </summary>
         public bool JustOneInstance { get; set; }
-
-        /// <summary>
-        /// Fonte de atualização
-        /// </summary>
-        public UpdateSource UpdateSource { get; set; }
-
-        public UpdateType UpdateType { get; set; }
 
         /// <summary>
         /// Arquivo de configuração lido
@@ -95,6 +101,33 @@ namespace gs_loader_common.Setup
         [JsonIgnore]
         public string SetupFile { get; set; }
 
+        /// <summary>
+        /// Nome do setup
+        /// </summary>
+        public string SetupName { get; set; }
+
+        /// <summary>
+        /// Observação do setup
+        /// </summary>
+        public string SetupNote { get; set; }
+
+        public string SetupVersion
+        {
+            get
+            {
+                foreach (var f in Files)
+                    if (f.Executable)
+                        return f.Version.ToString();
+                return "";
+            }
+        }
+        public TelemetryHost TelemetryHost { get; set; }
+        /// <summary>
+        /// Fonte de atualização
+        /// </summary>
+        public UpdateSource UpdateSource { get; set; }
+
+        public UpdateType UpdateType { get; set; }
         /// <summary>
         /// Cria uma instância de setup a partir de um executável ou pasta
         /// </summary>
@@ -160,6 +193,15 @@ namespace gs_loader_common.Setup
             return true;
         }
 
+        public static bool CreateEmptySetupFile(string fileName)
+        {
+            fileName = ParseFileName(fileName);
+            if (string.IsNullOrEmpty(fileName))
+                return false;
+            var sd = new SetupData();
+            return Write(fileName, sd, out string message);
+        }
+
         /// <summary>
         /// Trata o nome do arquivo caso for informado apenas a pasta
         /// </summary>
@@ -213,16 +255,6 @@ namespace gs_loader_common.Setup
                 return false;
             }
         }
-
-        public static bool CreateEmptySetupFile(string fileName)
-        {
-            fileName = ParseFileName(fileName);
-            if (string.IsNullOrEmpty(fileName))
-                return false;
-            var sd = new SetupData();
-            return Write(fileName, sd, out string message);
-        }
-
         /// <summary>
         /// Gravar setup no arquivo
         /// </summary>
@@ -272,6 +304,5 @@ namespace gs_loader_common.Setup
             UpdateSource = (UpdateSource)UpdateSource.Clone(),
             UpdateType = UpdateType
         };
-
     }
 }

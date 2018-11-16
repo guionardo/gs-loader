@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.lblMsg = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
             // lblMsg
@@ -39,10 +40,19 @@
             this.lblMsg.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.lblMsg.Location = new System.Drawing.Point(4, 4);
             this.lblMsg.Name = "lblMsg";
-            this.lblMsg.Size = new System.Drawing.Size(472, 232);
+            this.lblMsg.Size = new System.Drawing.Size(472, 209);
             this.lblMsg.TabIndex = 0;
             this.lblMsg.Text = "WaitForm\r\nMúltiplas linhas";
             this.lblMsg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.progressBar1.Location = new System.Drawing.Point(4, 213);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(472, 23);
+            this.progressBar1.TabIndex = 1;
+            this.progressBar1.Visible = false;
             // 
             // WaitForm
             // 
@@ -52,6 +62,7 @@
             this.ClientSize = new System.Drawing.Size(480, 240);
             this.ControlBox = false;
             this.Controls.Add(this.lblMsg);
+            this.Controls.Add(this.progressBar1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "WaitForm";
             this.Opacity = 0.8D;
@@ -65,5 +76,6 @@
         #endregion
 
         private System.Windows.Forms.Label lblMsg;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }

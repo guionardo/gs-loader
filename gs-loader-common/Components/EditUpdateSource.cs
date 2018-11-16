@@ -11,6 +11,8 @@ namespace gs_loader_common.Components
             InitializeComponent();
             cmbUpdateSource.SelectedIndex = 0;
             cmbUpdateType.SelectedIndex = 0;
+            cmbUpdateType_SelectedIndexChanged(null, null);
+            cmbUpdateSource_SelectedIndexChanged(null, null);
         }
 
         public UpdateSource UpdateSource

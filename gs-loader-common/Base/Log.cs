@@ -117,7 +117,7 @@ namespace gs_loader_common.Base
                     if (Path.GetFileName(logs[i]).StartsWith(DateTime.Now.ToString("yyyyMMdd")))
                         continue;
 
-                    zip = Path.Combine(pastaArquivo, string.Format("Log_{0:yyyy_MM}.zip", File.GetCreationTime(logs[i])));
+                    zip = Path.Combine(pastaArquivo, string.Format("Log_{0:yyyy_MM}.zip", IO.FileCreationTime(logs[i])));
                     ZipFile z;
                     if (zips.ContainsKey(zip))
                         z = zips[zip];

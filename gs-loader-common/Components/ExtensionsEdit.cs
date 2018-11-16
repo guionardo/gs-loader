@@ -83,7 +83,7 @@ namespace gs_loader_common.Components
                     Value = new string[0];
                 return;
             }
-            var _v = exts.ToLowerInvariant().Split(' ');
+            var _v = exts.ToLowerInvariant().Replace("*", "").Split(' ');
             for (int i = 0; i < _v.Length; i++)
                 if (!_v[i].StartsWith("."))
                     _v[i] = "." + _v[i];

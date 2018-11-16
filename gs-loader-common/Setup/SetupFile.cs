@@ -32,7 +32,7 @@ namespace gs_loader_common.Setup
                 FileInfo fi = new FileInfo(fileName);
                 Size = fi.Length;
 
-                CreationTime = System.IO.File.GetCreationTime(fileName);
+                CreationTime = IO.FileCreationTime(fileName);
                 MD5 = IO.MD5(fileName);
 
                 if (string.IsNullOrEmpty(baseFolder))
@@ -105,9 +105,8 @@ namespace gs_loader_common.Setup
 
         public bool Assign(object value)
         {
-            if (value is SetupFile)
+            if (value is SetupFile v)
             {
-                SetupFile v = (SetupFile)value;
                 File = v.File;
                 Version = (Version)v.Version.Clone();
                 Description = v.Description;
@@ -162,5 +161,16 @@ namespace gs_loader_common.Setup
         }
         public override string ToString() => (Folder ?? "NOFOLDER") + Path.DirectorySeparatorChar + (File ?? "NOFILE");
 
+        public string HashString()
+        {
+            string hash = CreationTime.ToBinary().ToString() +
+                (Description ?? "").GetHashCode().ToString() +
+                Executable.GetHashCode().ToString() +
+                MD5.GetHashCode().ToString() +
+                Size.GetHashCode().ToString() +
+                Version.GetHashCode().ToString();
+
+            return IO.MD5FromString(hash);
+        }
     }
 }

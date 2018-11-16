@@ -133,6 +133,10 @@
     <Compile Include="Setup\Version.cs" />
     <Compile Include="Stats\DoStats.cs" />
     <Compile Include="Stats\ProcessInstance.cs" />
+    <Compile Include="Telemetry\ISendTelemetry.cs" />
+    <Compile Include="Telemetry\TelemetryHost.cs" />
+    <Compile Include="Telemetry\TelemetryHostType.cs" />
+    <Compile Include="Telemetry\TelemetryMessage.cs" />
     <Compile Include="Update\DoUpdate.cs" />
     <Compile Include="Update\IUpdateMethod.cs" />
     <Compile Include="Update\UpdateFromFolder.cs" />

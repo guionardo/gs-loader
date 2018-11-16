@@ -21,7 +21,7 @@ namespace gs_loader_common.Base
         /// <param name="setupFiles"></param>
         /// <param name="setupFile"></param>
         /// <returns></returns>
-        public static int IndexOf(this List<SetupFile> setupFiles, SetupFile setupFile)
+        public static int IndexOfFile(this List<SetupFile> setupFiles, SetupFile setupFile)
         {
             for (int i = 0; i < setupFiles.Count; i++)
                 if (setupFiles[i].CompareTo(setupFile) == 0)
@@ -55,17 +55,25 @@ namespace gs_loader_common.Base
             foreach (var f in files)
             {
                 SetupFile setupFile = new SetupFile(f, folder);
-                var index = setupFiles.IndexOf(setupFile);
+                var index = setupFiles.IndexOfFile(setupFile);
                 if (Contains(ignoredExts, Path.GetExtension(f)))
                 {
+                    // Extensão ignorada
                     setupFile.State = SetupFileState.OnFolderUnselected;
                     setupFile.Include = false;
                 }
                 else
                 if (Contains(includedExts, Path.GetExtension(f)))
                 {
+                    // Extensão incluída
                     setupFile.State = index == -1 ? SetupFileState.OnFolder : SetupFileState.Synced;
                     setupFile.Include = true;
+                }
+                else
+                {
+                    // Arquivo existente na pasta
+                    setupFile.State = index == -1 ? SetupFileState.OnFolder : SetupFileState.Synced;
+                    setupFile.Include = false;
                 }
                 if (index == -1)
                 {

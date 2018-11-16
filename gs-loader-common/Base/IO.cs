@@ -1,6 +1,7 @@
 ﻿using gs_loader_common.Setup;
 using System;
 using System.IO;
+using System.Text;
 
 namespace gs_loader_common.Base
 {
@@ -66,6 +67,26 @@ namespace gs_loader_common.Base
             return cacheFolder;
         }
         /// <summary>
+        /// Retorna a data/hora de criação do arquivo em UTC e sem os milissegundos
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static DateTime FileCreationTime(string fileName)
+        {
+            try
+            {
+                DateTime fct = File.GetCreationTimeUtc(fileName);
+                fct.AddMilliseconds(-fct.Millisecond);
+                return fct;
+            }
+            catch
+            {
+                return DateTime.MinValue;
+            }
+
+        }
+
+        /// <summary>
         /// Identifica um arquivo executável pela sua extensão
         /// </summary>
         /// <param name="fileName"></param>
@@ -123,8 +144,20 @@ namespace gs_loader_common.Base
                 return "";
             try
             {
+                return MD5FromString(File.ReadAllText(fileName));
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        public static string MD5FromString(string text)
+        {
+            try
+            {
                 var md5 = System.Security.Cryptography.MD5.Create();
-                var bytes = md5.ComputeHash(File.ReadAllBytes(fileName));
+                var bytes = md5.ComputeHash(Encoding.UTF8.GetBytes(text));
                 string hash = "";
                 foreach (var b in bytes)
                     hash += b.ToString("X2").ToLower();
@@ -134,7 +167,6 @@ namespace gs_loader_common.Base
             {
                 return "";
             }
-
         }
 
         /// <summary>
@@ -180,6 +212,26 @@ namespace gs_loader_common.Base
                 LastError = e.Message;
             }
             return File.Exists(destiny) && string.IsNullOrEmpty(LastError);
+        }
+
+        /// <summary>
+        /// Procura pelo executável principal na pasta
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <returns></returns>
+        public static string FindMainExecutable(string folder)
+        {
+            if (!Directory.Exists(folder)) return "";
+
+            var files = Directory.GetFiles(folder, "*.exe");
+            if (files.Length == 0) return "";
+
+            foreach (var f in files)
+            {
+                if (Path.GetFileNameWithoutExtension(f).Equals(Path.GetFileName(folder), StringComparison.InvariantCultureIgnoreCase))
+                    return f;
+            }
+            return "";
         }
     }
 }
