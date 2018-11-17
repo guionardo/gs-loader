@@ -61,6 +61,7 @@
     <Compile Include="Base\IO.cs" />
     <Compile Include="Base\Log.cs" />
     <Compile Include="Base\Output.cs" />
+    <Compile Include="Base\SetupFolder.cs" />
     <Compile Include="Components\DefaultExts.cs">
       <SubType>UserControl</SubType>
     </Compile>

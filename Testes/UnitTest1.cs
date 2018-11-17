@@ -131,5 +131,11 @@ namespace Testes
             }
         }
 
+        [TestMethod]
+        public void TestSetupFolder()
+        {
+            SetupFolder sf = new SetupFolder(".");
+            Console.WriteLine(sf.SetupPath);
+        }
     }
 }

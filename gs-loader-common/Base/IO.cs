@@ -26,7 +26,9 @@ namespace gs_loader_common.Base
             }
         }
 
-        public static string LastError { get; private set; }
+        public static string LastError { get; private set; } = "";
+        public static Exception LastException { get; private set; } = null;
+
         /// <summary>
         /// Pasta de backup para as versões atualizadas
         /// </summary>
@@ -133,8 +135,12 @@ namespace gs_loader_common.Base
             {
                 Directory.CreateDirectory(folderName);
                 LastError = "";
+                LastException = null;
             }
-            catch (Exception e) { LastError = e.Message; }
+            catch (Exception e) {
+                LastError = e.Message;
+                LastException = e;
+            }
             return Directory.Exists(folderName);
         }
 
@@ -182,10 +188,12 @@ namespace gs_loader_common.Base
             {
                 File.Delete(fileName);
                 LastError = "";
+                LastException = null;
             }
             catch (Exception e)
             {
                 LastError = e.Message;
+                LastException = e;
             }
             return !File.Exists(fileName);
         }
@@ -206,10 +214,12 @@ namespace gs_loader_common.Base
                 TryDelete(destiny);
                 File.Move(fileName, destiny);
                 LastError = "";
+                LastException = null;
             }
             catch (Exception e)
             {
                 LastError = e.Message;
+                LastException = e;
             }
             return File.Exists(destiny) && string.IsNullOrEmpty(LastError);
         }
