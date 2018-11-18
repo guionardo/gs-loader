@@ -16,11 +16,6 @@ namespace gs_loader.Arguments
                 {
                     Operation=TypeOperation.Help;
                 } },
-            {"s|setup:", "Criar/alterar arquivo de configuração", v =>
-            {
-                Operation = TypeOperation.Setup;
-                SetupFile = v;
-            } },
             {"i|install:", "Instalar sistema a partir do arquivo de configuração", v =>
             {
                 Operation = TypeOperation.Install;
@@ -79,9 +74,6 @@ namespace gs_loader.Arguments
             {
                 case TypeOperation.Verify:
                     DoOperations.Verify(SetupFile);
-                    break;
-                case TypeOperation.Setup:
-                    OperationForm = DoOperations.Setup(SetupFile);
                     break;
                 case TypeOperation.Run:
                     DoOperations.Run(SetupFile);

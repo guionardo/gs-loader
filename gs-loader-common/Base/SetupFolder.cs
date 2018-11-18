@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace gs_loader_common.Base
 {
@@ -12,6 +8,18 @@ namespace gs_loader_common.Base
     /// </summary>
     public class SetupFolder
     {
+        /// <summary>
+        /// Local da aplicação
+        /// </summary>
+        public readonly string AppPath;
+
+        /// <summary>
+        /// Local da pasta de setup (.gsloader)
+        /// </summary>
+        public readonly string SetupPath;
+
+        private const string fileReadMe = "ATENÇÃO-LEIA-ME.TXT";
+
         /// <summary>
         /// Inicializa pasta de setup
         /// </summary>
@@ -26,23 +34,54 @@ namespace gs_loader_common.Base
 
             AppPath = Path.GetFullPath(folder);
             SetupPath = Path.Combine(AppPath, ".gsloader");
+            CachePath = Path.Combine(SetupPath, "cache");
+            BackupPath = Path.Combine(SetupPath, "backup");
+            StatsPath = Path.Combine(SetupPath, "stats");
+            DBPath = Path.Combine(StatsPath, "stats.db");
+            LogPath = Path.Combine(SetupPath, "log");
 
             if (!IO.MakeFolder(SetupPath))
                 throw new DirectoryNotFoundException("Erro ao criar pasta de setup:" + IO.LastError, IO.LastException);
+            if (!IO.MakeFolder(CachePath))
+                throw new DirectoryNotFoundException("Erro ao criar pasta de cache:" + IO.LastError, IO.LastException);
+            if (!IO.MakeFolder(BackupPath))
+                throw new DirectoryNotFoundException("Erro ao criar pasta de backup:" + IO.LastError, IO.LastException);
+            if (!IO.MakeFolder(StatsPath))
+                throw new DirectoryNotFoundException("Erro ao criar pasta de estatísticas:" + IO.LastError, IO.LastException);
+            if (!IO.MakeFolder(LogPath))
+                throw new DirectoryNotFoundException("Erro ao criar pasta de log:" + IO.LastError, IO.LastException);
 
             var fa = File.GetAttributes(SetupPath);
             if (!fa.HasFlag(FileAttributes.Hidden))
                 File.SetAttributes(SetupPath, fa | FileAttributes.Hidden);
+
+            try
+            {
+                File.WriteAllText(Path.Combine(SetupPath, fileReadMe), Properties.Resources.setupReadme);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Erro ao criar arquivo {fileReadMe} na pasta de setup:" + e.Message, e);
+            }
         }
+        /// <summary>
+        /// Local da pasta de backup (.gsloader/backup)
+        /// </summary>
+        public string BackupPath { get; }
 
         /// <summary>
-        /// Local da aplicação
+        /// Local da pasta de cache (.gsloader/cache)
         /// </summary>
-        public readonly string AppPath;
+        public string CachePath { get; }
+        /// <summary>
+        /// Local do arquivo de banco de dados (.gsloader/stats/stats.db)
+        /// </summary>
+        public string DBPath { get; }
+        public string LogPath { get; }
 
         /// <summary>
-        /// Local da pasta de setup (.gsloader)
+        /// Local da pasta de estatísticasd (.gsloader/stats)
         /// </summary>
-        public readonly string SetupPath;
+        public string StatsPath { get; }
     }
 }

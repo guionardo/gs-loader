@@ -69,5 +69,16 @@ namespace gs_loader_common.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a *** ATENÇÃO ***
+        ///
+        ///Não altere o conteúdo desta pasta!.
+        /// </summary>
+        internal static string setupReadme {
+            get {
+                return ResourceManager.GetString("setupReadme", resourceCulture);
+            }
+        }
     }
 }

@@ -61,30 +61,12 @@ namespace gs_loader_common.Setup
         public string Description { get; set; }
 
         /// <summary>
-        /// Arquivo executável principal do setup
-        /// </summary>
-        public bool Executable
-        {
-            get { return _executable; }
-            set
-            {
-                if (value && !IO.IsExecutable(File)) return;
-                _executable = value;
-            }
-        }
-
-        /// <summary>
         /// Nome do arquivo
         /// </summary>
         public string File { get; set; }
 
+        public SetupFileFlags FileFlags { get; set; }
         public string Folder { get; set; }
-
-        /// <summary>
-        /// Propriedade utilizada para selecionar na grid de setup
-        /// </summary>
-        [JsonIgnore]
-        public bool Include { get; set; }
 
         /// <summary>
         /// MD5
@@ -114,7 +96,7 @@ namespace gs_loader_common.Setup
                 Size = v.Size;
                 CreationTime = v.CreationTime;
                 Folder = v.Folder;
-                Executable = v.Executable;
+                FileFlags = v.FileFlags;
                 return true;
             }
             return false;
@@ -129,7 +111,7 @@ namespace gs_loader_common.Setup
             Size = Size,
             CreationTime = CreationTime,
             Folder = Folder,
-            Executable = Executable
+            FileFlags = FileFlags
         };
 
         public int CompareTo(object obj)
@@ -159,18 +141,18 @@ namespace gs_loader_common.Setup
                 return 1;
             return ext1.CompareTo(ext2);
         }
-        public override string ToString() => (Folder ?? "NOFOLDER") + Path.DirectorySeparatorChar + (File ?? "NOFILE");
-
         public string HashString()
         {
             string hash = CreationTime.ToBinary().ToString() +
                 (Description ?? "").GetHashCode().ToString() +
-                Executable.GetHashCode().ToString() +
+                FileFlags.GetHashCode().ToString() +
                 MD5.GetHashCode().ToString() +
                 Size.GetHashCode().ToString() +
                 Version.GetHashCode().ToString();
 
             return IO.MD5FromString(hash);
         }
+
+        public override string ToString() => (Folder ?? "NOFOLDER") + Path.DirectorySeparatorChar + (File ?? "NOFILE");
     }
 }

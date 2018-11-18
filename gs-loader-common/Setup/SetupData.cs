@@ -35,7 +35,7 @@ namespace gs_loader_common.Setup
         public string Arguments { get; set; }
 
         /// <summary>
-        /// Executável 
+        /// Executável do setup
         /// </summary>
         [JsonIgnore]
         public SetupFile Executable
@@ -43,13 +43,13 @@ namespace gs_loader_common.Setup
             get
             {
                 foreach (var f in Files)
-                    if (f.Executable)
+                    if (f.FileFlags.HasFlag(SetupFileFlags.MainExecutable))
                         return f;
                 // Não encontrou nenhum executável definido. Procurará pelo primeiro executável
                 for (int i = 0; i < Files.Count; i++)
                     if (string.IsNullOrEmpty(Files[i].Folder) && IO.IsExecutable(Files[i].File))
                     {
-                        Files[i].Executable = true;
+                        Files[i].FileFlags.Add(SetupFileFlags.MainExecutable);
                         return Files[i];
                     }
 
@@ -59,8 +59,8 @@ namespace gs_loader_common.Setup
             {
                 if (!IO.IsExecutable(value.File))
                     return;
-                value.Executable = true;
-                for (int i = 0; i < Files.Count; i++) Files[i].Executable = false;
+                value.FileFlags.Add(SetupFileFlags.MainExecutable);
+                for (int i = 0; i < Files.Count; i++) Files[i].FileFlags.Remove(SetupFileFlags.MainExecutable);
                 for (int i = 0; i < Files.Count; i++)
                     if (Files[i].File.Equals(value.File, StringComparison.InvariantCultureIgnoreCase) &&
                         Files[i].Folder.Equals(value.Folder, StringComparison.InvariantCultureIgnoreCase))
@@ -116,11 +116,12 @@ namespace gs_loader_common.Setup
             get
             {
                 foreach (var f in Files)
-                    if (f.Executable)
+                    if (f.FileFlags.HasFlag(SetupFileFlags.MainExecutable))
                         return f.Version.ToString();
                 return "";
             }
         }
+
         public TelemetryHost TelemetryHost { get; set; }
         /// <summary>
         /// Fonte de atualização
@@ -280,7 +281,7 @@ namespace gs_loader_common.Setup
                 SetupData clone = (SetupData)setupData.Clone();
                 clone.Files.Clear();
                 foreach (var f in setupData.Files)
-                    if (f.Include)
+                    if (f.FileFlags.HasFlag(SetupFileFlags.Include))
                         clone.Files.Add(f);
 
                 string json = JsonConvert.SerializeObject(clone, Formatting.Indented);

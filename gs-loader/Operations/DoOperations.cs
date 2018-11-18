@@ -57,18 +57,7 @@ Utilização: {exe} [opções]
             }
 
             return true;
-        }
-
-        internal static Form Setup(string setupFile)
-        {
-            setupFile = SetupData.ParseFileName(setupFile);
-            if (!File.Exists(setupFile))
-                SetupData.CreateEmptySetupFile(setupFile);
-            if (!SetupData.Read(setupFile, out SetupData _setupData, out string msg))
-                return null;
-
-            return new SetupForm(_setupData);
-        }
+        }       
 
         /// <summary>
         /// Verifica os arquivos na pasta com os dados do SetupData

@@ -100,14 +100,11 @@
     <Compile Include="Forms\OutputMultipleMessage.Designer.cs">
       <DependentUpon>OutputMultipleMessage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SetupFileItem.cs" />
+    <Compile Include="Interfaces\IPlugin.cs" />
+    <Compile Include="Plugin\DefaultPlugin.cs" />
+    <Compile Include="Plugin\PluginFactory.cs" />
+    <Compile Include="Setup\SetupFileFlags.cs" />
     <Compile Include="Setup\SetupFileState.cs" />
-    <Compile Include="Forms\SetupForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SetupForm.Designer.cs">
-      <DependentUpon>SetupForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\UpdateForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -134,6 +131,7 @@
     <Compile Include="Setup\Version.cs" />
     <Compile Include="Stats\DoStats.cs" />
     <Compile Include="Stats\ProcessInstance.cs" />
+    <Compile Include="Stats\Statistics.cs" />
     <Compile Include="Telemetry\ISendTelemetry.cs" />
     <Compile Include="Telemetry\TelemetryHost.cs" />
     <Compile Include="Telemetry\TelemetryHostType.cs" />
@@ -167,9 +165,6 @@
     <EmbeddedResource Include="Forms\OutputMultipleMessage.resx">
       <DependentUpon>OutputMultipleMessage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SetupForm.resx">
-      <DependentUpon>SetupForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\UpdateForm.resx">
       <DependentUpon>UpdateForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -186,6 +181,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\icones.svg" />
+    <None Include="Resources\setupReadme.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

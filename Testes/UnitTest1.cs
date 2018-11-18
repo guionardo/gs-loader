@@ -122,20 +122,23 @@ namespace Testes
         }
 
         [TestMethod]
-        public void SetupForm()
-        {
-            SetupData setupData = new SetupData();
-            using (var sf = new SetupForm(setupData))
-            {
-                sf.ShowDialog();
-            }
-        }
-
-        [TestMethod]
         public void TestSetupFolder()
         {
             SetupFolder sf = new SetupFolder(".");
             Console.WriteLine(sf.SetupPath);
+        }
+
+        [TestMethod]
+        public void Enums()
+        {
+            SetupFileFlags s = new SetupFileFlags();
+            Console.WriteLine(s);
+            s |= SetupFileFlags.Icon | SetupFileFlags.MainExecutable;
+            Console.WriteLine(s);
+            s &= ~SetupFileFlags.Icon;
+            Console.WriteLine(s);
+            s &= ~SetupFileFlags.Icon;
+            Console.WriteLine(s);
         }
     }
 }

@@ -38,9 +38,9 @@ namespace gs_loader_setup
             bool HasInclude = false;
             foreach (var f in formSetupData.Files)
             {
-                if (f.Executable)
+                if (f.FileFlags.HasFlag(SetupFileFlags.MainExecutable))
                     HasExecutable = true;
-                if (f.Include)
+                if (f.FileFlags.HasFlag(SetupFileFlags.Include))
                     HasInclude = true;
                 if (HasExecutable && HasInclude)
                     break;
@@ -54,9 +54,8 @@ namespace gs_loader_setup
                     foreach (var f in formSetupData.Files)
                         if (string.IsNullOrEmpty(f.Folder) && Path.GetFileName(f.File).Equals(probExecutable, StringComparison.InvariantCultureIgnoreCase))
                         {
+                            f.FileFlags |= SetupFileFlags.Include | SetupFileFlags.MainExecutable;
                             HasExecutable = true;
-                            f.Executable = true;
-                            f.Include = true;
                             HasInclude = true;
                             break;
                         }
@@ -154,10 +153,10 @@ namespace gs_loader_setup
                     e.Value = setupFileItem.MD5;
                     break;
                 case 5: // Incluir
-                    e.Value = setupFileItem.Include;
+                    e.Value = setupFileItem.FileFlags.HasFlag(SetupFileFlags.Include);
                     break;
                 case 6: // Executável
-                    e.Value = setupFileItem.Executable;
+                    e.Value = setupFileItem.FileFlags.HasFlag(SetupFileFlags.MainExecutable);
                     break;
             }
         }
@@ -166,26 +165,27 @@ namespace gs_loader_setup
         {
             if (e.RowIndex < 0 || e.RowIndex >= formSetupData.Files.Count)
                 return;
+            SetupFile sf = formSetupData.Files[e.RowIndex];
             switch (e.ColumnIndex)
             {
                 case 5:
-                    formSetupData.Files[e.RowIndex].Include = !formSetupData.Files[e.RowIndex].Include;
+                    sf.FileFlags.Invert(SetupFileFlags.Include);
                     break;
                 case 6:
-                    formSetupData.Files[e.RowIndex].Executable = !formSetupData.Files[e.RowIndex].Executable;
+                    sf.FileFlags.Invert(SetupFileFlags.MainExecutable);
 
-                    if (formSetupData.Files[e.RowIndex].Executable)
+                    if (sf.FileFlags.HasFlag(SetupFileFlags.MainExecutable))
                     {
-                        if (!IO.IsExecutable(formSetupData.Files[e.RowIndex].File))
+                        if (!IO.IsExecutable(sf.File))
                         {
-                            formSetupData.Files[e.RowIndex].Executable = false;
+                            sf.FileFlags.Remove(SetupFileFlags.MainExecutable);
                             Dialog.Error("O arquivo " + formSetupData.Files[e.RowIndex].File + " não é do tipo executável!");
                         }
                         else
                             for (int i = 0; i < formSetupData.Files.Count; i++)
                                 if (i != e.RowIndex)
-                                    formSetupData.Files[i].Executable = false;
-                        dgvFiles.Refresh();
+                                    formSetupData.Files[i].FileFlags.Remove(SetupFileFlags.MainExecutable);
+                        dgvFiles.Invalidate();
                     }
                     break;
             }
@@ -312,25 +312,25 @@ namespace gs_loader_setup
             {
                 foreach (var f in formSetupData.Files)
                     if (Path.GetExtension(f.File).Equals(m.Tag.ToString(), StringComparison.InvariantCultureIgnoreCase))
-                        f.Include = false;
+                        f.FileFlags.Remove(SetupFileFlags.Include);
             }
             else if (sender == cmGridDesmarcarPasta)
             {
                 foreach (var f in formSetupData.Files)
                     if (f.Folder.Equals(m.Tag.ToString(), StringComparison.InvariantCultureIgnoreCase))
-                        f.Include = false;
+                        f.FileFlags.Remove(SetupFileFlags.Include);
             }
             else if (sender == cmGridMarcarExtensao)
             {
                 foreach (var f in formSetupData.Files)
                     if (Path.GetExtension(f.File).Equals(m.Tag.ToString(), StringComparison.InvariantCultureIgnoreCase))
-                        f.Include = true;
+                        f.FileFlags.Add(SetupFileFlags.Include);
             }
             else if (sender == cmGridMarcarPasta)
             {
                 foreach (var f in formSetupData.Files)
                     if (f.Folder.Equals(m.Tag.ToString(), StringComparison.InvariantCultureIgnoreCase))
-                        f.Include = true;
+                        f.FileFlags.Add(SetupFileFlags.Include);
             }
             else return;
             cmGrid.Refresh();

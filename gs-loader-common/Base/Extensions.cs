@@ -60,20 +60,20 @@ namespace gs_loader_common.Base
                 {
                     // Extensão ignorada
                     setupFile.State = SetupFileState.OnFolderUnselected;
-                    setupFile.Include = false;
+                    setupFile.FileFlags &= ~SetupFileFlags.Include;
                 }
                 else
                 if (Contains(includedExts, Path.GetExtension(f)))
                 {
                     // Extensão incluída
                     setupFile.State = index == -1 ? SetupFileState.OnFolder : SetupFileState.Synced;
-                    setupFile.Include = true;
+                    setupFile.FileFlags |= SetupFileFlags.Include;
                 }
                 else
                 {
                     // Arquivo existente na pasta
                     setupFile.State = index == -1 ? SetupFileState.OnFolder : SetupFileState.Synced;
-                    setupFile.Include = false;
+                    setupFile.FileFlags &= ~SetupFileFlags.Include;
                 }
                 if (index == -1)
                 {
@@ -131,6 +131,24 @@ namespace gs_loader_common.Base
         public static string MimeType(string extension)
         {
             return System.Web.MimeMapping.GetMimeMapping("test" + extension);
+        }
+        
+        public static void Add(this SetupFileFlags flags, SetupFileFlags value)
+        {
+            flags |= value;
+        }
+
+        public static void Remove(this SetupFileFlags flags, SetupFileFlags value)
+        {
+            flags &= ~value;
+        }
+
+        public static void Invert(this SetupFileFlags flags, SetupFileFlags value)
+        {
+            if (flags.HasFlag(value))
+                flags.Remove(value);
+            else
+                flags.Add(value);
         }
     }
 }
