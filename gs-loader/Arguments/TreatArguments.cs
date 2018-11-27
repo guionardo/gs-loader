@@ -1,4 +1,5 @@
 ﻿using gs_loader.Operations;
+using gs_loader_common.Base;
 using NDesk.Options;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,12 @@ namespace gs_loader.Arguments
                 Operation = TypeOperation.Install;
                 SetupFile = v;
             } },
-            {"r|run:","Executar sistema a partir do arquivo de configuração", v =>
+            {"r|run:","Executar sistema a partir da pasta de configuração", v =>
             {
                 Operation = TypeOperation.Run;
+                if (string.IsNullOrEmpty(v))
+                    v=Directory.GetCurrentDirectory();
+                setupFolder = new SetupFolder(v);
                 SetupFile = v;
             } },
             {"u|update:","Atualizar sistema", v=>
@@ -43,13 +47,14 @@ namespace gs_loader.Arguments
             } },
             {"nogui","Informações de processamento via console", v=>
             {
-                gs_loader_common.Base.Output.NoGUI = true;
+                Output.NoGUI = true;
             }}
         };
 
         public static TypeOperation Operation { get; private set; }
         public static string SetupFile { get; private set; }
         public static Form OperationForm = null;
+        public static SetupFolder setupFolder { get; private set; }
 
         /// <summary>
         /// Tratar os parâmetros da linha de comando

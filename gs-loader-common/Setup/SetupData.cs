@@ -129,6 +129,7 @@ namespace gs_loader_common.Setup
         public UpdateSource UpdateSource { get; set; }
 
         public UpdateType UpdateType { get; set; }
+
         /// <summary>
         /// Cria uma instância de setup a partir de um executável ou pasta
         /// </summary>
