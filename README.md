@@ -62,3 +62,7 @@ Transformar este projeto dentro dos princípios SOLID. Links:[1](https://medium.
 
 - DDIP - Dependency inversion principle - Princípio da inversão de dependência
 > Dependa de abstrações e não de implementações.
+
+## Entidades
+
+FileEntry - Arquivo relacionado para cópia/atualização

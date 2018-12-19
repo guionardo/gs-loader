@@ -41,7 +41,7 @@ namespace gs_loader_common.Setup
         public SetupFile Executable
         {
             get
-            {
+            {                
                 foreach (var f in Files)
                     if (f.FileFlags.HasFlag(SetupFileFlags.MainExecutable))
                         return f;

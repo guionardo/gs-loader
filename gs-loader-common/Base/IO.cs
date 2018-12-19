@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace gs_loader_common.Base
 {
@@ -137,7 +138,8 @@ namespace gs_loader_common.Base
                 LastError = "";
                 LastException = null;
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 LastError = e.Message;
                 LastException = e;
             }
@@ -157,6 +159,8 @@ namespace gs_loader_common.Base
                 return "";
             }
         }
+
+        public static bool IsMD5(this string md5) => Regex.IsMatch(md5 ?? "", "^[0-9a-fA-F]{32}$", RegexOptions.Compiled);
 
         public static string MD5FromString(string text)
         {
