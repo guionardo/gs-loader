@@ -21,12 +21,12 @@ namespace gs_loader_common.Setup
                     Path.GetExtension(fileName).Equals(".dll", StringComparison.InvariantCultureIgnoreCase))
                 {
                     FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(fileName);
-                    Version = new Version(fvi.FileVersion ?? "0.0.0.0");
+                    Version = new Base.Version(fvi.FileVersion ?? "0.0.0.0");
                     Description = fvi.FileDescription ?? Path.GetFileNameWithoutExtension(fileName);
                 }
                 else
                 {
-                    Version = new Version();
+                    Version = new Base.Version();
                     Description = Path.GetExtension(fileName).ToLower() + " FILE";
                 }
                 FileInfo fi = new FileInfo(fileName);
@@ -83,14 +83,14 @@ namespace gs_loader_common.Setup
         /// <summary>
         /// Versão
         /// </summary>
-        public Version Version { get; set; }
+        public Base.Version Version { get; set; }
 
         public bool Assign(object value)
         {
             if (value is SetupFile v)
             {
                 File = v.File;
-                Version = (Version)v.Version.Clone();
+                Version = (Base.Version)v.Version.Clone();
                 Description = v.Description;
                 MD5 = v.MD5;
                 Size = v.Size;
@@ -105,7 +105,7 @@ namespace gs_loader_common.Setup
         public object Clone() => new SetupFile
         {
             File = File,
-            Version = (Version)Version.Clone(),
+            Version = (Base.Version)Version.Clone(),
             Description = Description,
             MD5 = MD5,
             Size = Size,

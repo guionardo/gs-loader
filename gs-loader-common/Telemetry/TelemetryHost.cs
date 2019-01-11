@@ -14,7 +14,7 @@ namespace gs_loader_common.Telemetry
         public TelemetryHostType HostType { get; set; }
 
         /// <summary>
-        /// Destino do envio de telemetria (Pasta de arquivos de log, URL http, URL ftp)
+        /// Destino do envio de telemetria (Pasta de arquivos de log, URL http[s])
         /// </summary>
         public string HostTarget { get; set; }
 

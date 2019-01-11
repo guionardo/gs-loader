@@ -16,7 +16,7 @@ namespace gs_loader_common.Setup
         /// <summary>
         /// Arquivo de setup padrão
         /// </summary>
-        public const string DefaultFileName = "gs-loader.json";
+        public const string DefaultFileName = "gsloader.json";
         /// <summary>
         /// Extensões padrão para criação de SetupData a partir de diretório ou executável
         /// </summary>

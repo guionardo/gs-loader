@@ -44,6 +44,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -54,10 +55,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\Assignable.cs" />
     <Compile Include="Base\Communication.cs" />
     <Compile Include="Base\Dialog.cs" />
     <Compile Include="Base\Exceptions.cs" />
     <Compile Include="Base\Extensions.cs" />
+    <Compile Include="Base\FingerPrint.cs" />
     <Compile Include="Base\IO.cs" />
     <Compile Include="Base\Log.cs" />
     <Compile Include="Base\Output.cs" />
@@ -101,9 +104,24 @@
       <DependentUpon>OutputMultipleMessage.cs</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IPlugin.cs" />
+    <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Plugin\DefaultPlugin.cs" />
     <Compile Include="Plugin\PluginFactory.cs" />
-    <Compile Include="Setup\FileEntry.cs" />
+    <Compile Include="Programs\Program.cs" />
+    <Compile Include="Programs\UpdateNeedType.cs" />
+    <Compile Include="Repository\FolderRepository.cs" />
+    <Compile Include="Repository\HTTPRepository.cs" />
+    <Compile Include="Repository\RepositoryInfo.cs" />
+    <Compile Include="Programs\FileEntry.cs" />
+    <Compile Include="Repository\RepositoryType.cs" />
+    <Compile Include="Resources\StringName.cs" />
+    <Compile Include="Resources\Strings.cs" />
+    <Compile Include="Run\DoHelp.cs" />
+    <Compile Include="Run\DoInstall.cs" />
+    <Compile Include="Run\DoRun.cs" />
+    <Compile Include="Run\DoStats.cs" />
+    <Compile Include="Run\DoUpdate.cs" />
+    <Compile Include="Run\DoVerify.cs" />
     <Compile Include="Setup\SetupFileFlags.cs" />
     <Compile Include="Setup\SetupFileState.cs" />
     <Compile Include="Forms\UpdateForm.cs">
@@ -129,14 +147,14 @@
     <Compile Include="Setup\SetupData.cs" />
     <Compile Include="Setup\SetupFile.cs" />
     <Compile Include="Setup\SetupVerify.cs" />
-    <Compile Include="Setup\Version.cs" />
-    <Compile Include="Stats\DoStats.cs" />
+    <Compile Include="Base\Version.cs" />
     <Compile Include="Stats\ProcessInstance.cs" />
     <Compile Include="Stats\Statistics.cs" />
     <Compile Include="Telemetry\ISendTelemetry.cs" />
     <Compile Include="Telemetry\TelemetryHost.cs" />
     <Compile Include="Telemetry\TelemetryHostType.cs" />
     <Compile Include="Telemetry\TelemetryMessage.cs" />
+    <Compile Include="Telemetry\TelemetryMessageType.cs" />
     <Compile Include="Update\DoUpdate.cs" />
     <Compile Include="Update\IUpdateMethod.cs" />
     <Compile Include="Update\UpdateFromFolder.cs" />

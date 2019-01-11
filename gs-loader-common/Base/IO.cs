@@ -1,5 +1,6 @@
 ﻿using gs_loader_common.Setup;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -14,9 +15,15 @@ namespace gs_loader_common.Base
         /// </summary>
         static readonly string[] executableExtensions = new string[] { "exe", "cmd", "bat", "com" };
 
+        public static readonly string BaseFolder;
+
         static IO()
         {
-            _cacheFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "GSLoader", "cache");
+            BaseFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "GSLoader");
+            if (!MakeFolder(BaseFolder))
+                throw new DirectoryNotFoundException("Erro ao criar/acessar a pasta " + BaseFolder);
+
+            _cacheFolder = Path.Combine(BaseFolder, "cache");
             if (!MakeFolder(_cacheFolder))
             {
                 _cacheFolder = Path.Combine(Directory.GetCurrentDirectory(), "GSLoader", "cache");
@@ -160,7 +167,7 @@ namespace gs_loader_common.Base
             }
         }
 
-        public static bool IsMD5(this string md5) => Regex.IsMatch(md5 ?? "", "^[0-9a-fA-F]{32}$", RegexOptions.Compiled);
+        public static bool IsMD5(string md5) => Regex.IsMatch(md5 ?? "", "^[0-9a-fA-F]{32}$", RegexOptions.Compiled);
 
         public static string MD5FromString(string text)
         {
@@ -246,6 +253,106 @@ namespace gs_loader_common.Base
                     return f;
             }
             return "";
+        }
+
+        /// <summary>
+        /// Copia o conteúdo de uma pasta para outra
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <param name="destiny"></param>
+        /// <returns></returns>
+        public static bool CopyFolderContent(string origin, string destiny, bool removePreexistents, out string message)
+        {
+
+            if (string.IsNullOrEmpty(origin))
+            {
+                message = "Origem não informada";
+                return false;
+            }
+            if (!Directory.Exists(origin))
+            {
+                message = "Origem inexistente (" + origin + ")";
+                return false;
+            }
+            if (!MakeFolder(destiny))
+            {
+                message = "Erro na criação de (" + destiny + "): " + LastError;
+                return false;
+            }
+
+            if (removePreexistents)
+                try { Directory.Delete(destiny, true); } catch { }
+
+            if (!MakeFolder(destiny))
+            {
+                message = "Erro na criação de (" + destiny + "): " + LastError;
+                return false;
+            }
+
+            StringBuilder erros = new StringBuilder();
+            foreach (var f in Directory.GetFiles(origin, "*.*", SearchOption.AllDirectories))
+            {
+                string fd = f.Replace(origin, destiny);
+                if (!MakeFolder(Path.GetDirectoryName(fd)))
+                    erros.AppendLine(Path.GetDirectoryName(fd) + " : " + LastError);
+                else
+                    try
+                    {
+                        File.Copy(f, fd, true);
+                    }
+                    catch (Exception e)
+                    {
+                        erros.AppendLine(fd + " : " + e.Message);
+                    }
+            }
+
+            message = erros.ToString();
+            return string.IsNullOrEmpty(message);
+        }
+
+        /// <summary>
+        /// Retorna um nome de arquivo válido de acordo com o nome informado, retirando caracteres inválidos
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static string ValidFileName(string name)
+        {          
+
+            var normalizedString = name.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            name = stringBuilder.ToString().Normalize(NormalizationForm.FormC).ToLowerInvariant();
+
+            byte[] byteArray = Encoding.UTF8.GetBytes(name);
+            byte[] asciiArray = Encoding.Convert(Encoding.UTF8, Encoding.ASCII, byteArray);
+            name = Encoding.ASCII.GetString(asciiArray).Replace("?","");
+
+            foreach (char c in Path.GetInvalidFileNameChars())
+            {
+                name = name.Replace(c, '_');
+            }
+            name = name.Replace(' ', '_');
+            int p = name.IndexOf("__");
+            while (p >= 0)
+            {
+                name = name.Remove(p, 1);
+                p = name.IndexOf("__");
+            }
+            while (name.StartsWith("_"))
+                name = name.Remove(0, 1);
+            while (name.EndsWith("_"))
+                name = name.Substring(0, name.Length - 1);
+
+            return name;
         }
     }
 }

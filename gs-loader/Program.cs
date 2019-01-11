@@ -1,7 +1,6 @@
 ﻿using gs_loader.Arguments;
 using gs_loader_common.Base;
 using gs_loader_common.Forms;
-using gs_loader.Run;
 using System;
 using System.Threading;
 using System.Windows.Forms;
@@ -26,7 +25,10 @@ namespace gs_loader
 
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                args = new string[] { "--setup:C:\\TEMP" };
+                args = new string[] { "--help" };
+                // RUN C:\TEMP
+                //args = new string[] { "--run:C:\\TEMP" };
+                //args = new string[] { "--setup:C:\\TEMP" };
                 //args = new string[] { "--verify:C:\\TEMP" };
                 //args = new string[] { "--stats:C:\\TEMP"};
             }
@@ -61,7 +63,7 @@ namespace gs_loader
                 Application.Run(TreatArguments.OperationForm);
             }
 
-            while (DoRun.IsRunning)
+            while (gs_loader_common.Run.DoRun.IsRunning)
             {
                 Application.DoEvents();
                 Thread.Sleep(100);

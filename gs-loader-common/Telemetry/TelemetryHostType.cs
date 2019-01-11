@@ -2,8 +2,8 @@
 {
     public enum TelemetryHostType
     {
-        LogFile = 0,
-        HTTP = 1,
-        FTP = 2
+        None = 0,
+        LogFile = 1,
+        HTTP = 2
     }
 }

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace gs_loader_common.Setup
+namespace gs_loader_common.Base
 {
     public class Version : IComparable, ICloneable
     {

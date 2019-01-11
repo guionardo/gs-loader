@@ -1,0 +1,29 @@
+﻿namespace gs_loader_common.Resources
+{
+    public enum StringName
+    {
+        OptionHelp,
+        OptionRun,
+        OptionInstall,
+        OptionUpdate,
+        OptionVerify,
+        OptionStats,
+        OptionErrorParameter,
+        OptionErrorRepository,
+        OptionErrorRepositoryNotFound,
+        OptionSetup,
+        OptionHelpMessage,
+        FileNotFound,
+        FileSizeDiff,
+        FileMD5Diff,
+        FileIdentical,
+        DirectoryNotFound,
+        DirectoryNotCreated,
+        OptionErrorProgram,
+        OptionHost,
+        OptionProgram,
+        OptionErrorRepositoryType,
+        FileReadMe,
+        FileNotCreated
+    }
+}

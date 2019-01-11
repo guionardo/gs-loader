@@ -17,20 +17,16 @@ namespace gs_loader_common.Base
         public static bool Debugging = true;
 
         const string LogPrefix = "GS-LOADER";
-        static readonly string LogPath;
+        static string LogPath;
 
-        static Log()
+        public static bool SetLogPath(string logPath)
         {
-            try
+            if (IO.MakeFolder(logPath))
             {
-                LogPath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                LogPath = logPath;
+                return true;
             }
-            catch
-            {
-                LogPath = AppDomain.CurrentDomain.BaseDirectory;
-            }
-            LogPath = Path.Combine(LogPath, "LOG");
-            IO.MakeFolder(LogPath);
+            return false;
         }
 
         /// <summary>
@@ -40,6 +36,9 @@ namespace gs_loader_common.Base
         /// <param name="tipoLog"></param>
         public static bool Add(string texto, string tipoLog = null)
         {
+            if (string.IsNullOrEmpty(LogPath) || !Directory.Exists(LogPath))
+                return false;
+
             try
             {
                 string nomeArquivo = Path.Combine(LogPath, LogPrefix + "." + DateTime.Now.ToString("yyyyMMdd") + ".log");

@@ -3,9 +3,8 @@ using System.Diagnostics;
 using gs_loader.Arguments;
 using gs_loader_common.Base;
 using gs_loader_common.Forms;
-using gs_loader.Run;
+using gs_loader_common.Run;
 using gs_loader_common.Setup;
-using gs_loader_common.Stats;
 using gs_loader_common.Update;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -14,12 +13,6 @@ namespace Testes
     [TestClass]
     public class UnitTest1
     {
-        [TestMethod]
-        public void ArgumentoHelp()
-        {
-            TreatArguments.Parse("--help");
-
-        }
 
         [TestMethod]
         public void ArgumentoRun()
@@ -55,71 +48,30 @@ namespace Testes
             SetupData.Write(@"A:\TBYTE", setup, out msg);
             Console.WriteLine(msg);
         }
-        [TestMethod]
-        public void Run()
-        {
-            var setupData = new SetupFile(@"A:\TEMP\TESTE.CMD", @"A:\TEMP");
-            DoRun.Run(new SetupData { Executable = setupData, Arguments = "ARGUMENTO 1" }, @"A:\TEMP", out string message);
-            Console.WriteLine(message);
-        }
 
         [TestMethod]
         public void CacheFolder()
         {
             SetupData.Create(@"A:\TBYTE", out SetupData setup, out string msg);
             Console.WriteLine(IO.CacheFolder(setup, true));
-
         }
 
         [TestMethod]
         public void Versions()
         {
-            Assert.IsTrue(new gs_loader_common.Setup.Version("10.0.2.1").CompareTo("9.2.3.9") > 0);
-            Assert.IsTrue(new gs_loader_common.Setup.Version("10.0.2.1").CompareTo("11.2.3.9") < 0);
-            Assert.IsTrue(new gs_loader_common.Setup.Version("10.0.1.1").CompareTo("10.0.2.1") < 0);
+            Assert.IsTrue(new gs_loader_common.Base.Version("10.0.2.1").CompareTo("9.2.3.9") > 0);
+            Assert.IsTrue(new gs_loader_common.Base.Version("10.0.2.1").CompareTo("11.2.3.9") < 0);
+            Assert.IsTrue(new gs_loader_common.Base.Version("10.0.1.1").CompareTo("10.0.2.1") < 0);
         }
 
         [TestMethod]
         public void Backup()
         {
             SetupData.Create(@"A:\TBYTE", out SetupData setup, out string msg);
-            DoUpdate.Backup(setup, @"A:\TBYTE");
+            gs_loader_common.Update.DoUpdate.Backup(setup, @"A:\TBYTE");
         }
 
-        [TestMethod]
-        public void InstanciasExecutando()
-        {
-            //Process.Start("notepad.exe");
-            Assert.IsTrue(DoRun.InstancesRunning("notepad.exe"));
-        }
 
-        [TestMethod]
-        public void ListarInstancias()
-        {
-            System.Collections.Generic.List<ProcessInstance> procs = new System.Collections.Generic.List<ProcessInstance>();
-            if (DoStats.ListAllProcesses(procs))
-            {
-                foreach (var p in procs)
-                    Console.WriteLine(p);
-            }
-
-            System.Collections.Generic.List<string> uniques = null;
-            if (DoStats.ListUniqueProcesses(ref uniques))
-            {
-                foreach (var u in uniques)
-                    Console.WriteLine(u);
-            }
-
-
-
-            System.Collections.Generic.List<ProcessInstance> instances = null;
-            if (DoStats.ListInstances("notepad", ref instances))
-            {
-                foreach (var i in instances)
-                    Console.WriteLine(i);
-            }
-
-        }
 
         [TestMethod]
         public void TestSetupFolder()
@@ -140,5 +92,14 @@ namespace Testes
             s &= ~SetupFileFlags.Icon;
             Console.WriteLine(s);
         }
+
+        [TestMethod]
+        public void TesteAcentos()
+        {
+            string teste = "?:*Teste&ªºcom ção";
+            Console.WriteLine(teste);
+            Console.WriteLine(IO.ValidFileName(teste));
+        }
+
     }
 }
