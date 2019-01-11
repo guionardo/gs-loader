@@ -103,6 +103,7 @@
     <Compile Include="Forms\OutputMultipleMessage.Designer.cs">
       <DependentUpon>OutputMultipleMessage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IRequirement.cs" />
     <Compile Include="Interfaces\IPlugin.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Plugin\DefaultPlugin.cs" />
@@ -114,6 +115,8 @@
     <Compile Include="Repository\RepositoryInfo.cs" />
     <Compile Include="Programs\FileEntry.cs" />
     <Compile Include="Repository\RepositoryType.cs" />
+    <Compile Include="Requirements\Requirement.cs" />
+    <Compile Include="Requirements\VFP7Requirement.cs" />
     <Compile Include="Resources\StringName.cs" />
     <Compile Include="Resources\Strings.cs" />
     <Compile Include="Run\DoHelp.cs" />
@@ -200,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\icones.svg" />
+    <None Include="Requirements\README.md" />
     <None Include="Resources\setupReadme.txt" />
   </ItemGroup>
   <ItemGroup />

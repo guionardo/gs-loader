@@ -30,24 +30,6 @@ namespace gs_loader_common.Programs
         public List<FileEntry> Files { get; private set; }
 
         /// <summary>
-        /// Verifica se os arquivos do programa são equivalentes aos da pasta de instalação
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public bool Verify(string basePath, out string message)
-        {
-            StringBuilder sb = new StringBuilder();
-            if (!Main.Valid(basePath, out string msg))
-                sb.AppendLine(msg);
-            foreach (var f in Files)
-                if (!f.Valid(basePath, out msg))
-                    sb.AppendLine(msg);
-
-            message = sb.ToString();
-            return message.Length == 0;
-        }
-
-        /// <summary>
         /// Indica que somente uma instância pode ser executada por vez
         /// </summary>
         public bool JustOneInstance { get; set; }
@@ -66,6 +48,7 @@ namespace gs_loader_common.Programs
         /// Nome do programa
         /// </summary>
         public string ProgramName { get; private set; }
+
         public string RepositoryHost
         {
             get => _repositoryHost;
@@ -81,13 +64,21 @@ namespace gs_loader_common.Programs
         }
 
         /// <summary>
+        /// Lista de requerimentos para instalação
+        /// </summary>
+        /// <see cref="Requirements.Requirement"/>
+        public List<string> Requirements { get; private set; } = new List<string>();
+
+        /// <summary>
         /// Tipo da atualização automática
         /// </summary>
         public UpdateType UpdateType { get; set; }
+
         /// <summary>
         /// Versão do programa
         /// </summary>
         public string Version { get; private set; }
+
         /// <summary>
         /// Carrega a partir de um arquivo .json
         /// </summary>
@@ -275,6 +266,23 @@ namespace gs_loader_common.Programs
             //TODO: Implementar a checagem de arquivos não sincronizados com sua informação no arquivo gsloader.json
         }
 
+        /// <summary>
+        /// Verifica se os arquivos do programa são equivalentes aos da pasta de instalação
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public bool Verify(string basePath, out string message)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (!Main.Valid(basePath, out string msg))
+                sb.AppendLine(msg);
+            foreach (var f in Files)
+                if (!f.Valid(basePath, out msg))
+                    sb.AppendLine(msg);
+
+            message = sb.ToString();
+            return message.Length == 0;
+        }
         /// <summary>
         /// Carrega informações do programa a partir de uma string json
         /// </summary>
