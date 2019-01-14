@@ -115,6 +115,11 @@ namespace gs_loader.Arguments
 
                         break;
 
+                    case TypeOperation.Setup:
+                        // Criar um setup a partir de uma pasta
+                        DoCreateSetup.CreateSetup(SetupPath, RepositoryHost, out message); 
+                        break;
+
                     default:
                         StringWriter m = new StringWriter();
                         Options.WriteOptionDescriptions(m);

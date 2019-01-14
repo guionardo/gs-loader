@@ -67,5 +67,10 @@ namespace gs_loader_common.Repository
         {
             throw new NotImplementedException();
         }
+
+        public bool PushProgram(Program program, string setupFolder)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

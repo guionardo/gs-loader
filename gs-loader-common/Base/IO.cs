@@ -310,13 +310,25 @@ namespace gs_loader_common.Base
             return string.IsNullOrEmpty(message);
         }
 
+        public static bool IsValidFilename(string testName)
+        {
+            var invalidChars = Path.GetInvalidPathChars();
+            foreach (var c in testName)
+                foreach (var ic in invalidChars)
+                    if (ic == c)
+                        return false;
+
+            return Regex.IsMatch(testName, "^([a-zA-Z]:)?(\\\\[^<>:\"/\\\\|?*]+)+\\\\?$");
+
+        }
+
         /// <summary>
         /// Retorna um nome de arquivo válido de acordo com o nome informado, retirando caracteres inválidos
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         public static string ValidFileName(string name)
-        {          
+        {
 
             var normalizedString = name.Normalize(NormalizationForm.FormD);
             var stringBuilder = new StringBuilder();
@@ -334,7 +346,7 @@ namespace gs_loader_common.Base
 
             byte[] byteArray = Encoding.UTF8.GetBytes(name);
             byte[] asciiArray = Encoding.Convert(Encoding.UTF8, Encoding.ASCII, byteArray);
-            name = Encoding.ASCII.GetString(asciiArray).Replace("?","");
+            name = Encoding.ASCII.GetString(asciiArray).Replace("?", "");
 
             foreach (char c in Path.GetInvalidFileNameChars())
             {

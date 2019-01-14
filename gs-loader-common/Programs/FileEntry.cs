@@ -1,8 +1,8 @@
 ﻿using gs_loader_common.Base;
 using gs_loader_common.Resources;
-using gs_loader_common.Setup;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace gs_loader_common.Programs
@@ -12,12 +12,14 @@ namespace gs_loader_common.Programs
     /// </summary>
     public class FileEntry : IComparable, ICloneable
     {
+        private string _filedescription;
         private DateTime _fileTime = DateTime.MinValue;
         private string _filetype;
         private string _md5 = "";
         private long _size = -1;
         private Base.Version _version = null;
-
+        public string RealFileName => File.Exists(Path.Combine(RealFilePath, FileName)) ? Path.Combine(RealFilePath, FileName) : "";
+        
         /// <summary>
         /// Cria instância de FileEntry a partir de um arquivo real
         /// </summary>
@@ -28,15 +30,20 @@ namespace gs_loader_common.Programs
             if (File.Exists(fileName))
             {
                 FileName = Path.GetFileName(fileName);
+                RealFilePath = Path.GetDirectoryName(fileName);
+                if (string.IsNullOrEmpty(basePath))
+                    basePath = Path.GetDirectoryName(fileName);
+
+                BasePath = basePath;
 
                 // Forçar carregamento das informações do arquivo
                 var v = this.Version;
                 var s = this.Size;
                 var m = this.MD5;
                 var t = this.FileType;
+                var d = this.Description;
 
-                RealFilePath = Path.GetDirectoryName(fileName);
-                BasePath = basePath;
+
                 if (RealFilePath.Length >= BasePath.Length)
                     Folder = RealFilePath.Substring(BasePath.Length);
                 else
@@ -88,6 +95,28 @@ namespace gs_loader_common.Programs
         public string BasePath { get; private set; }
 
         /// <summary>
+        /// Descrição do arquivo
+        /// </summary>
+        public string Description
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_filedescription))
+                {
+                    var rfn = RealFileName;
+                    if (!string.IsNullOrEmpty(rfn))
+                    {
+                        FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(rfn);
+                        if (!string.IsNullOrEmpty(fvi.FileDescription))
+                            _filedescription = fvi.FileDescription;
+                        else
+                            _filedescription = FileType;
+                    }
+                }
+                return _filedescription;
+            }
+        }
+        /// <summary>
         /// Nome do programa
         /// </summary>
         public string FileName { get; private set; }
@@ -101,7 +130,11 @@ namespace gs_loader_common.Programs
             {
                 if (_fileTime == DateTime.MinValue)
                 {
-                    _fileTime = File.GetCreationTimeUtc(Path.Combine(RealFilePath, FileName));
+                    var rfn = RealFileName;
+                    if (!string.IsNullOrEmpty(rfn))
+                    {
+                        _fileTime = File.GetCreationTimeUtc(rfn);
+                    }
                 }
                 return _fileTime;
             }
@@ -136,7 +169,11 @@ namespace gs_loader_common.Programs
             {
                 if (string.IsNullOrEmpty(_md5))
                 {
-                    _md5 = IO.MD5(Path.Combine(RealFilePath, FileName));
+                    var rfn = RealFileName;
+                    if (!string.IsNullOrEmpty(rfn))
+                    {
+                        _md5 = IO.MD5(rfn);
+                    }
                 }
                 return _md5;
             }
@@ -151,8 +188,12 @@ namespace gs_loader_common.Programs
             {
                 if (_size < 0)
                 {
-                    FileInfo fi = new FileInfo(Path.Combine(RealFilePath, FileName));
-                    _size = fi.Length;
+                    var rfn = RealFileName;
+                    if (!string.IsNullOrEmpty(rfn))
+                    {
+                        FileInfo fi = new FileInfo(rfn);
+                        _size = fi.Length;
+                    }
                 }
                 return _size;
             }
@@ -164,7 +205,11 @@ namespace gs_loader_common.Programs
             {
                 if (_version == null)
                 {
-                    _version = Base.Version.FromFile(FileName);
+                    var rfn = RealFileName;
+                    if (!string.IsNullOrEmpty(rfn))
+                    {
+                        _version = Base.Version.FromFile(rfn);
+                    }
                 }
                 return _version;
             }
@@ -228,6 +273,30 @@ namespace gs_loader_common.Programs
 
         public override int GetHashCode() => (BasePath ?? "" + "\\" + FileName ?? "").ToUpperInvariant().GetHashCode();
 
+        /// <summary>
+        /// Atualiza campos a partir de um arquivo existente
+        /// </summary>
+        /// <returns></returns>
+        public bool UpdateInfos(string fileName)
+        {
+            if (!File.Exists(fileName))
+                return false;
+
+            if (_fileTime == DateTime.MinValue)
+                _fileTime = File.GetCreationTimeUtc(fileName);
+
+            if (string.IsNullOrEmpty(_md5))
+                _md5 = IO.MD5(fileName);
+
+            if (_size < 0)
+            {
+                FileInfo fi = new FileInfo(fileName);
+                _size = fi.Length;
+            }
+
+            return true;
+        }
+
         public bool Valid(string basePath, out string message)
         {
             string realFile = Path.Combine(basePath, Folder, FileName);
@@ -251,29 +320,6 @@ namespace gs_loader_common.Programs
                 return false;
             }
             message = Strings.Get(StringName.FileIdentical, "FILE", realFile);
-            return true;
-        }
-        /// <summary>
-        /// Atualiza campos a partir de um arquivo existente
-        /// </summary>
-        /// <returns></returns>
-        public bool UpdateInfos(string fileName)
-        {
-            if (!File.Exists(fileName))
-                return false;
-
-            if (_fileTime == DateTime.MinValue)
-                _fileTime = File.GetCreationTimeUtc(fileName);
-
-            if (string.IsNullOrEmpty(_md5))
-                _md5 = IO.MD5(fileName);
-
-            if (_size < 0)
-            {
-                FileInfo fi = new FileInfo(fileName);
-                _size = fi.Length;
-            }
-
             return true;
         }
     }

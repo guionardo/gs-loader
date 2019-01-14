@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using gs_loader_common.Base;
+using gs_loader_common.Interfaces;
 using gs_loader_common.Programs;
 using gs_loader_common.Telemetry;
 using Newtonsoft.Json;
@@ -25,7 +26,9 @@ namespace gs_loader_common.Repository
             if (!string.IsNullOrEmpty(repositoryHost))
             {
                 if (Directory.Exists(repositoryHost))
-                    repositoryHost = @"file:\/\/" + repositoryHost;
+                {
+                    repositoryHost = @"file://" + repositoryHost;
+                }
 
                 if (Regex.IsMatch(repositoryHost, @"(http|https):\/\/(.*)"))
                 {
@@ -38,7 +41,7 @@ namespace gs_loader_common.Repository
                     _repositoryHost = repositoryHost.Substring(7);
                     RepositoryType = RepositoryType.Folder;
                     if (TelemetryHostType == TelemetryHostType.None)
-                        TelemetryHost = @"(file):\/\/" + _repositoryHost + "/telemetry";
+                        TelemetryHost = @"(file)://" + _repositoryHost + "/telemetry";
 
                     ReadRepositoryFromFile(Path.ChangeExtension(Path.GetFullPath(_repositoryHost), "json"), true);
                 }
@@ -52,9 +55,23 @@ namespace gs_loader_common.Repository
 
         }
 
+        public IRepository CreateRepository()
+        {
+            switch (RepositoryType)
+            {
+                case RepositoryType.None:
+                    return null;
+                case RepositoryType.Folder:
+                    return new FolderRepository(_repositoryHost);
+                case RepositoryType.HTTP:
+                    return new HTTPRepository(_repositoryHost);
+            }
+            return null;
+        }
+
         private void ReadRepositoryFromHTTP(string repositoryHost, bool noExceptions = false)
         {
-            throw new NotImplementedException();
+            //TODO: Carregar informações do repositório HTTP            
         }
 
         private void ReadRepositoryFromFile(string fileName, bool noExceptions = false)

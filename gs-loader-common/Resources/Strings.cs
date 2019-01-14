@@ -39,6 +39,9 @@ Utilização: %EXE% [opções]
                     strings.Add(StringName.FileSizeDiff, "Tamanho do arquivo: %FILE% (esperado: %EXPECTED% -> encontrado: %REAL%)");
                     strings.Add(StringName.FileMD5Diff, "MD-5: %FILE% (esperado: %EXPECTED% -> encontrado: %REAL%)");
                     strings.Add(StringName.FileIdentical, "Arquivo OK: %FILE%");
+                    strings.Add(StringName.FileExecutableNotFound, "Arquivo executável não encontrado: %FILE%");
+                    strings.Add(StringName.ExecutableFile, "Arquivo executável");
+                    strings.Add(StringName.ExecutableNotInformed, "Arquivo executável não informado");
 
                     strings.Add(StringName.DirectoryNotFound, "Pasta inexistente: %DIR%");
                     strings.Add(StringName.DirectoryNotCreated, "Pasta não foi criada: %DIR% (%ERROR%)");
@@ -73,6 +76,9 @@ Use: %EXE% [options]
                     strings.Add(StringName.FileSizeDiff, "File length: %FILE% (expected: %EXPECTED% -> found: %REAL%)");
                     strings.Add(StringName.FileMD5Diff, "MD-5: %FILE% (expected: %EXPECTED% -> found: %REAL%)");
                     strings.Add(StringName.FileIdentical, "File OK: %FILE%");
+                    strings.Add(StringName.FileExecutableNotFound, "Executable file not found: %FILE%");
+                    strings.Add(StringName.ExecutableFile, "Executable file");
+                    strings.Add(StringName.ExecutableNotInformed, "Executable file not informed");
 
                     strings.Add(StringName.DirectoryNotFound, "Directory not found: %DIR%");
                     strings.Add(StringName.DirectoryNotCreated, "Directory not created: %DIR% (%ERROR%)");

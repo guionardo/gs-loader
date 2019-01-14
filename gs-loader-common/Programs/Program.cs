@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using gs_loader_common.Base;
 using gs_loader_common.Repository;
+using gs_loader_common.Resources;
 using gs_loader_common.Update;
 using Newtonsoft.Json;
 
@@ -17,22 +18,36 @@ namespace gs_loader_common.Programs
         public const string DefaultFileName = "gsloader.json";
         private string _repositoryHost = "";
 
+        /// <summary>
+        /// Cria instância com um programa principal
+        /// </summary>
+        /// <param name="main"></param>
+        public Program(string main)
+        {
+            if (!File.Exists(main))
+                throw new FileNotFoundException(Strings.Get(StringName.FileNotFound, "FILE", main));
+
+            Main = new FileEntry(main, Path.GetDirectoryName(main));
+            Version = Main.Version.ToString();
+            ProgramName = Main.Description;
+        }
+
         private Program() { }
 
         /// <summary>
         /// Argumentos de execução do programa
         /// </summary>
-        public string Arguments { get; set; }
+        public string Arguments { get; set; } = "";
 
         /// <summary>
         /// Arquivos que compõe a instalação
         /// </summary>
-        public List<FileEntry> Files { get; private set; }
+        public List<FileEntry> Files { get; private set; } = new List<FileEntry>();
 
         /// <summary>
         /// Indica que somente uma instância pode ser executada por vez
         /// </summary>
-        public bool JustOneInstance { get; set; }
+        public bool JustOneInstance { get; set; } = false;
 
         /// <summary>
         /// Executável principal
@@ -43,7 +58,6 @@ namespace gs_loader_common.Programs
         /// Observação do setup
         /// </summary>
         public string Notes { get; set; }
-
         /// <summary>
         /// Nome do programa
         /// </summary>

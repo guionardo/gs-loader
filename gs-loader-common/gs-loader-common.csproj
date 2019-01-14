@@ -61,6 +61,7 @@
     <Compile Include="Base\Exceptions.cs" />
     <Compile Include="Base\Extensions.cs" />
     <Compile Include="Base\FingerPrint.cs" />
+    <Compile Include="Hosts\Host.cs" />
     <Compile Include="Base\IO.cs" />
     <Compile Include="Base\Log.cs" />
     <Compile Include="Base\Output.cs" />
@@ -89,6 +90,12 @@
     <Compile Include="Components\SelectFile.Designer.cs">
       <DependentUpon>SelectFile.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\EditSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EditSetup.Designer.cs">
+      <DependentUpon>EditSetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\HelpForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,6 +110,7 @@
     <Compile Include="Forms\OutputMultipleMessage.Designer.cs">
       <DependentUpon>OutputMultipleMessage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Hosts\HostType.cs" />
     <Compile Include="Interfaces\IRequirement.cs" />
     <Compile Include="Interfaces\IPlugin.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
@@ -119,6 +127,7 @@
     <Compile Include="Requirements\VFP7Requirement.cs" />
     <Compile Include="Resources\StringName.cs" />
     <Compile Include="Resources\Strings.cs" />
+    <Compile Include="Run\DoCreateSetup.cs" />
     <Compile Include="Run\DoHelp.cs" />
     <Compile Include="Run\DoInstall.cs" />
     <Compile Include="Run\DoRun.cs" />
@@ -166,6 +175,7 @@
     <Compile Include="Update\UpdateType.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Documents\ClassDiagrams.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +190,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Components\SelectFile.resx">
       <DependentUpon>SelectFile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\EditSetup.resx">
+      <DependentUpon>EditSetup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\HelpForm.resx">
       <DependentUpon>HelpForm.cs</DependentUpon>

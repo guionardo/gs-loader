@@ -33,6 +33,14 @@ namespace gs_loader_common.Interfaces
         /// <param name="cacheFolder"></param>
         /// <returns></returns>
         bool DownloadToCache(string programName, string cacheFolder);
+
+        /// <summary>
+        /// Envia programa para o repositório
+        /// </summary>
+        /// <param name="program"></param>
+        /// <param name="setupFolder"></param>
+        /// <returns></returns>
+        bool PushProgram(Program program, string setupFolder);
         
     }
 }
