@@ -114,6 +114,7 @@
     <Compile Include="Interfaces\IRequirement.cs" />
     <Compile Include="Interfaces\IPlugin.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Interfaces\ITelemetry.cs" />
     <Compile Include="Plugin\DefaultPlugin.cs" />
     <Compile Include="Plugin\PluginFactory.cs" />
     <Compile Include="Programs\Program.cs" />
@@ -122,7 +123,6 @@
     <Compile Include="Repository\HTTPRepository.cs" />
     <Compile Include="Repository\RepositoryInfo.cs" />
     <Compile Include="Programs\FileEntry.cs" />
-    <Compile Include="Repository\RepositoryType.cs" />
     <Compile Include="Requirements\Requirement.cs" />
     <Compile Include="Requirements\VFP7Requirement.cs" />
     <Compile Include="Resources\StringName.cs" />
@@ -162,9 +162,8 @@
     <Compile Include="Base\Version.cs" />
     <Compile Include="Stats\ProcessInstance.cs" />
     <Compile Include="Stats\Statistics.cs" />
-    <Compile Include="Telemetry\ISendTelemetry.cs" />
-    <Compile Include="Telemetry\TelemetryHost.cs" />
-    <Compile Include="Telemetry\TelemetryHostType.cs" />
+    <Compile Include="Telemetry\FolderTelemetry.cs" />
+    <Compile Include="Telemetry\HTTPTelemetry.cs" />
     <Compile Include="Telemetry\TelemetryMessage.cs" />
     <Compile Include="Telemetry\TelemetryMessageType.cs" />
     <Compile Include="Update\DoUpdate.cs" />

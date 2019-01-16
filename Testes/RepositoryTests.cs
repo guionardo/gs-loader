@@ -36,13 +36,16 @@ namespace Testes
         public void RepositoryInfo()
         {
             var r1 = new RepositoryInfo("http://repositorio.info");
-            Assert.IsTrue(r1.RepositoryType == RepositoryType.HTTP);
+            Assert.IsTrue(r1.RepositoryType == HostType.HTTP);
 
             r1 = new RepositoryInfo(@"file://B:\REPOSITORIO");
-            Assert.IsTrue(r1.RepositoryType == RepositoryType.Folder);
+            Assert.IsTrue(r1.RepositoryType == HostType.LocalFolder);
 
             r1 = new RepositoryInfo(@"B:\REPOSITORIO");
-            Assert.IsTrue(r1.RepositoryType == RepositoryType.Folder);
+            Assert.IsTrue(r1.RepositoryType == HostType.LocalFolder);
+
+            r1 = new RepositoryInfo(@"\\AUTOCOM-VM\repositorio");
+            Assert.IsTrue(r1.RepositoryType == HostType.SharedFolder);
         }
 
         [TestMethod]

@@ -26,7 +26,7 @@ namespace gs_loader_common.Run
             repositoryHost = repositoryHost ?? "";
 
             var ri = new RepositoryInfo(repositoryHost);
-            if (ri.RepositoryType == RepositoryType.None)
+            if (ri.RepositoryType == Hosts.HostType.None)
             {
                 message = Strings.Get(StringName.OptionErrorRepositoryType, "REPO", repositoryHost);
                 return false;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Text.RegularExpressions;
 using gs_loader_common.Base;
+using gs_loader_common.Hosts;
 using gs_loader_common.Interfaces;
 using gs_loader_common.Programs;
 using gs_loader_common.Telemetry;
@@ -15,166 +15,104 @@ namespace gs_loader_common.Repository
     public class RepositoryInfo : Assignable
     {
         private string _repositoryHost;
-        private string _telemetryHost = "";
-        public Program[] Programs { get; private set; }
+        private string _telemetryHost;
         /// <summary>
         /// Inicializa uma instância do repositório a partir de arquivo de configuração
         /// </summary>
         /// <param name="fileName"></param>
         public RepositoryInfo(string repositoryHost = null)
         {
+            _repositoryHost = "";
+            RepositoryHost = null;
+            TelemetryHost = null;
+
             if (!string.IsNullOrEmpty(repositoryHost))
-            {
-                if (Directory.Exists(repositoryHost))
-                {
-                    repositoryHost = @"file://" + repositoryHost;
-                }
-
-                if (Regex.IsMatch(repositoryHost, @"(http|https):\/\/(.*)"))
-                {
-                    _repositoryHost = repositoryHost;
-                    RepositoryType = RepositoryType.HTTP;
-                    ReadRepositoryFromHTTP(_repositoryHost, true);
-                }
-                else if (Regex.IsMatch(repositoryHost, @"(file):\/\/(.*)"))
-                {
-                    _repositoryHost = repositoryHost.Substring(7);
-                    RepositoryType = RepositoryType.Folder;
-                    if (TelemetryHostType == TelemetryHostType.None)
-                        TelemetryHost = @"(file)://" + _repositoryHost + "/telemetry";
-
-                    ReadRepositoryFromFile(Path.ChangeExtension(Path.GetFullPath(_repositoryHost), "json"), true);
-                }
-                else
-                {
-                    _repositoryHost = "";
-                    RepositoryType = RepositoryType.None;
-                }
-
-            }
-
+                RepositoryName = repositoryHost;
         }
 
-        public IRepository CreateRepository()
-        {
-            switch (RepositoryType)
-            {
-                case RepositoryType.None:
-                    return null;
-                case RepositoryType.Folder:
-                    return new FolderRepository(_repositoryHost);
-                case RepositoryType.HTTP:
-                    return new HTTPRepository(_repositoryHost);
-            }
-            return null;
-        }
-
-        private void ReadRepositoryFromHTTP(string repositoryHost, bool noExceptions = false)
-        {
-            //TODO: Carregar informações do repositório HTTP            
-        }
-
-        private void ReadRepositoryFromFile(string fileName, bool noExceptions = false)
-        {
-            if (!File.Exists(fileName))
-                if (noExceptions)
-                    return;
-                else
-                    throw new FileNotFoundException("Setup file not found", fileName);
-
-            try
-            {
-                var ri = JsonConvert.DeserializeObject<RepositoryInfo>(File.ReadAllText(fileName));
-                Assign(ri);
-            }
-            catch (Exception e)
-            {
-                if (!noExceptions)
-                    throw new Exception("Error parsing repository setup file", e);
-            }
-        }
-
+        public Program[] Programs { get; private set; }
         /// <summary>
         /// Nome do proprietário do repositório
         /// </summary>
         public string Proprietary { get; set; } = "";
+
+        public Host RepositoryHost { get; set; }
 
         /// <summary>
         /// Host do repositório
         /// http://repositorio.com/folder
         /// file://pasta/subpasta 
         /// </summary>
-        public string RepositoryHost
+        public string RepositoryName
         {
-            get => _repositoryHost; set
-            {
-                if (Regex.IsMatch(value, @"(http|https):\/\/(.*)"))
-                {
-                    _repositoryHost = value;
-                    RepositoryType = RepositoryType.HTTP;
-                }
-                else if (Regex.IsMatch(value, @"(file):\/\/(.*)"))
-                {
-                    _repositoryHost = value.Substring(7);
-                    RepositoryType = RepositoryType.Folder;
-                    if (TelemetryHostType == TelemetryHostType.None)
-                        TelemetryHost = @"(file):\/\/" + _repositoryHost + "/telemetry";
-                }
-                else
-                {
-                    _repositoryHost = "";
-                    RepositoryType = RepositoryType.None;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Nome do repositório
-        /// </summary>
-        public string RepositoryName { get; set; } = "";
-
-        /// <summary>
-        /// Tipo do repositório (http / arquivo)
-        /// </summary>
-        public RepositoryType RepositoryType { get; private set; } = RepositoryType.None;
-        /// <summary>
-        /// Host de telemetria 
-        /// </summary>
-        public string TelemetryHost
-        {
-            get { return _telemetryHost; }
+            get => RepositoryHost == null ? "" : RepositoryHost.HostName;
             set
             {
-                if (Regex.IsMatch(value, @"(http|https):\/\/(.*)"))
+                RepositoryHost = Host.FromName(value);
+                switch (RepositoryHost.HostType)
                 {
-                    _telemetryHost = value;
-                    TelemetryHostType = TelemetryHostType.HTTP;
-                }
-                else if (Regex.IsMatch(value, @"(file):\/\/(.*)"))
-                {
-                    _telemetryHost = value.Substring(7);
-                    TelemetryHostType = TelemetryHostType.LogFile;
-                }
-                else
-                {
-                    _telemetryHost = "";
-                    TelemetryHostType = TelemetryHostType.None;
+                    case HostType.HTTP:
+                        TelemetryHost = RepositoryHost;
+
+                        break;
+                    case HostType.LocalFolder:
+                    case HostType.SharedFolder:
+                        if (TelemetryHostType == HostType.None)
+                        {
+                            TelemetryHost = Host.FromName(value + "\\telemetry");
+                            _telemetryHost = value + "\\telemetry";
+                        }
+                        break;
+
+
+                    default:
+                        TelemetryHost = null;
+                        break;
+
+
                 }
             }
         }
 
-        public TelemetryHostType TelemetryHostType { get; private set; } = TelemetryHostType.None;
+        /// <summary>
+        /// Tipo do Host do Repositório
+        /// </summary>
+        public HostType RepositoryType => RepositoryHost == null ? HostType.None : RepositoryHost.HostType;
+
+        public Host TelemetryHost { get; set; }
+
+        /// <summary>
+        /// Tipo do Host de Telemetria
+        /// </summary>
+        public HostType TelemetryHostType => TelemetryHost == null ? HostType.None : TelemetryHost.HostType;
+
+        public IRepository CreateRepository()
+        {
+            switch (RepositoryType)
+            {
+                case HostType.None:
+                    return null;
+                case HostType.LocalFolder:
+                case HostType.SharedFolder:
+                    return new FolderRepository(RepositoryName);
+                case HostType.HTTP:
+                    return new HTTPRepository(RepositoryName);
+            }
+            return null;
+        }
+
         public bool ReadProgram(string programName, out string jsonInfo)
         {
             jsonInfo = "";
 
             switch (RepositoryType)
             {
-                case RepositoryType.None:
+                case HostType.None:
                     return false;
-                case RepositoryType.HTTP:
+                case HostType.HTTP:
                     return ReadProgramFromHTTP(programName, out jsonInfo);
-                case RepositoryType.Folder:
+                case HostType.LocalFolder:
+                case HostType.SharedFolder:
                     return ReadProgramFromFolder(programName, out jsonInfo);
             }
             return false;
@@ -205,14 +143,15 @@ namespace gs_loader_common.Repository
 
         public bool SendTelemetry(TelemetryMessage telemetryMessage)
         {
-            if (string.IsNullOrEmpty(_telemetryHost) || TelemetryHostType == TelemetryHostType.None)
+            if (string.IsNullOrEmpty(_telemetryHost) || TelemetryHostType == HostType.None)
                 return false;
 
             switch (TelemetryHostType)
             {
-                case TelemetryHostType.HTTP:
+                case HostType.HTTP:
                     return SendTelemetryToHTTP(telemetryMessage);
-                case TelemetryHostType.LogFile:
+                case HostType.LocalFolder:
+                case HostType.SharedFolder:
                     return SendTelemetryToFolder(telemetryMessage);
             }
 
@@ -236,6 +175,30 @@ namespace gs_loader_common.Repository
             throw new NotImplementedException();
         }
 
+        private void ReadRepositoryFromFile(string fileName, bool noExceptions = false)
+        {
+            if (!File.Exists(fileName))
+                if (noExceptions)
+                    return;
+                else
+                    throw new FileNotFoundException("Setup file not found", fileName);
+
+            try
+            {
+                var ri = JsonConvert.DeserializeObject<RepositoryInfo>(File.ReadAllText(fileName));
+                Assign(ri);
+            }
+            catch (Exception e)
+            {
+                if (!noExceptions)
+                    throw new Exception("Error parsing repository setup file", e);
+            }
+        }
+
+        private void ReadRepositoryFromHTTP(string repositoryHost, bool noExceptions = false)
+        {
+            //TODO: Carregar informações do repositório HTTP            
+        }
         private bool SendTelemetryToFolder(TelemetryMessage telemetryMessage)
         {
             //TODO: Implementar envio de telemetria para pasta

@@ -68,11 +68,8 @@ namespace gs_loader_common.Programs
             get => _repositoryHost;
             set
             {
-                RepositoryInfo ri = new RepositoryInfo
-                {
-                    RepositoryHost = value
-                };
-                if (ri.RepositoryType != RepositoryType.None)
+                RepositoryInfo ri = new RepositoryInfo(value);
+                if (ri.RepositoryType != Hosts.HostType.None)
                     _repositoryHost = value;
             }
         }

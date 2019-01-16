@@ -122,7 +122,11 @@ namespace gs_loader_common.Setup
             }
         }
 
-        public TelemetryHost TelemetryHost { get; set; }
+        /// <summary>
+        /// Informações do repositório (incluindo telemetria)
+        /// </summary>
+        public Repository.RepositoryInfo Repository { get; set; }
+        
         /// <summary>
         /// Fonte de atualização
         /// </summary>

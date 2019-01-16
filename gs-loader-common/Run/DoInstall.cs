@@ -15,17 +15,18 @@ namespace gs_loader_common.Run
         {
             message = "";
             RepositoryInfo repo = new RepositoryInfo(repositoryHost);
-            if (repo.RepositoryType == RepositoryType.None)
+            if (repo.RepositoryType == Hosts.HostType.None)
             {
 
             }
             IRepository repository;
             switch (repo.RepositoryType)
             {
-                case RepositoryType.HTTP:
+                case Hosts.HostType.HTTP:
                     repository = new HTTPRepository(repositoryHost);
                     break;
-                case RepositoryType.Folder:
+                case Hosts.HostType.SharedFolder:
+                case Hosts.HostType.LocalFolder:
                     repository = new FolderRepository(repositoryHost);
                     break;
 

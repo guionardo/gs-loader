@@ -36,7 +36,8 @@ namespace gs_loader_common.Hosts
                 return new Host(HostType.LocalFolder, hostName);
 
             // \\COMPUTADOR\COMPARTILHAMENTO
-            if (Regex.IsMatch(hostName, @"(\\\\[\w\.]+\\[\w.$]+)\\(?:[\w]+\\)*\w([\w.])"))
+            if (Regex.IsMatch(hostName, @"(\\\\[\w\.]+\\[\w.$]+)\\(?:[\w]+\\)*\w([\w.])") ||
+                Regex.IsMatch(hostName, @"^\\{2}[\w-]+(\\{1}(([\w-][\w-\s]*[\w-]+[$$]?)|([\w-][$$]?$)))+"))
                 return new Host(HostType.SharedFolder, hostName);
 
             if (IO.IsValidFilename(hostName))
