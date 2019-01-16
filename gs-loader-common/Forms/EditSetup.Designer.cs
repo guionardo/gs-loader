@@ -40,17 +40,21 @@
             this.lbRequirements = new System.Windows.Forms.Label();
             this.txRequirements = new System.Windows.Forms.TextBox();
             this.gbUpdateType = new System.Windows.Forms.GroupBox();
-            this.chkUpdTypeBeforeRun = new System.Windows.Forms.CheckBox();
-            this.chkUpdTypeAfterRun = new System.Windows.Forms.CheckBox();
             this.chkUpdTypeOnceADay = new System.Windows.Forms.CheckBox();
+            this.chkUpdTypeAfterRun = new System.Windows.Forms.CheckBox();
+            this.chkUpdTypeBeforeRun = new System.Windows.Forms.CheckBox();
             this.lbRepositoryHost = new System.Windows.Forms.Label();
             this.txRepositoryHost = new System.Windows.Forms.TextBox();
             this.gbNotes = new System.Windows.Forms.GroupBox();
             this.txNotes = new System.Windows.Forms.TextBox();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.clnFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clnFolder = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clnVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clnSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clnDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnGravar = new System.Windows.Forms.Button();
+            this.btnCancelar = new System.Windows.Forms.Button();
             this.gbUpdateType.SuspendLayout();
             this.gbNotes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
@@ -112,11 +116,11 @@
             this.gbUpdateType.Name = "gbUpdateType";
             this.gbUpdateType.TabStop = false;
             // 
-            // chkUpdTypeBeforeRun
+            // chkUpdTypeOnceADay
             // 
-            resources.ApplyResources(this.chkUpdTypeBeforeRun, "chkUpdTypeBeforeRun");
-            this.chkUpdTypeBeforeRun.Name = "chkUpdTypeBeforeRun";
-            this.chkUpdTypeBeforeRun.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.chkUpdTypeOnceADay, "chkUpdTypeOnceADay");
+            this.chkUpdTypeOnceADay.Name = "chkUpdTypeOnceADay";
+            this.chkUpdTypeOnceADay.UseVisualStyleBackColor = true;
             // 
             // chkUpdTypeAfterRun
             // 
@@ -124,11 +128,11 @@
             this.chkUpdTypeAfterRun.Name = "chkUpdTypeAfterRun";
             this.chkUpdTypeAfterRun.UseVisualStyleBackColor = true;
             // 
-            // chkUpdTypeOnceADay
+            // chkUpdTypeBeforeRun
             // 
-            resources.ApplyResources(this.chkUpdTypeOnceADay, "chkUpdTypeOnceADay");
-            this.chkUpdTypeOnceADay.Name = "chkUpdTypeOnceADay";
-            this.chkUpdTypeOnceADay.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.chkUpdTypeBeforeRun, "chkUpdTypeBeforeRun");
+            this.chkUpdTypeBeforeRun.Name = "chkUpdTypeBeforeRun";
+            this.chkUpdTypeBeforeRun.UseVisualStyleBackColor = true;
             // 
             // lbRepositoryHost
             // 
@@ -154,11 +158,14 @@
             // 
             // dgvFiles
             // 
+            this.dgvFiles.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgvFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvFiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.clnFileName,
+            this.clnFolder,
             this.clnVersion,
-            this.clnSize});
+            this.clnSize,
+            this.clnDesc});
             resources.ApplyResources(this.dgvFiles, "dgvFiles");
             this.dgvFiles.Name = "dgvFiles";
             this.dgvFiles.RowHeadersVisible = false;
@@ -171,6 +178,11 @@
             this.clnFileName.Name = "clnFileName";
             this.clnFileName.ReadOnly = true;
             // 
+            // clnFolder
+            // 
+            resources.ApplyResources(this.clnFolder, "clnFolder");
+            this.clnFolder.Name = "clnFolder";
+            // 
             // clnVersion
             // 
             resources.ApplyResources(this.clnVersion, "clnVersion");
@@ -179,6 +191,7 @@
             // 
             // clnSize
             // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
             dataGridViewCellStyle1.Format = "N0";
             dataGridViewCellStyle1.NullValue = null;
             this.clnSize.DefaultCellStyle = dataGridViewCellStyle1;
@@ -186,10 +199,32 @@
             this.clnSize.Name = "clnSize";
             this.clnSize.ReadOnly = true;
             // 
+            // clnDesc
+            // 
+            resources.ApplyResources(this.clnDesc, "clnDesc");
+            this.clnDesc.Name = "clnDesc";
+            this.clnDesc.ReadOnly = true;
+            // 
+            // btnGravar
+            // 
+            resources.ApplyResources(this.btnGravar, "btnGravar");
+            this.btnGravar.Name = "btnGravar";
+            this.btnGravar.UseVisualStyleBackColor = true;
+            this.btnGravar.Click += new System.EventHandler(this.GravarPrograma);
+            // 
+            // btnCancelar
+            // 
+            this.btnCancelar.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            resources.ApplyResources(this.btnCancelar, "btnCancelar");
+            this.btnCancelar.Name = "btnCancelar";
+            this.btnCancelar.UseVisualStyleBackColor = true;
+            // 
             // EditSetup
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnCancelar);
+            this.Controls.Add(this.btnGravar);
             this.Controls.Add(this.dgvFiles);
             this.Controls.Add(this.gbNotes);
             this.Controls.Add(this.txRepositoryHost);
@@ -236,7 +271,11 @@
         private System.Windows.Forms.TextBox txNotes;
         private System.Windows.Forms.DataGridView dgvFiles;
         private System.Windows.Forms.DataGridViewTextBoxColumn clnFileName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clnFolder;
         private System.Windows.Forms.DataGridViewTextBoxColumn clnVersion;
         private System.Windows.Forms.DataGridViewTextBoxColumn clnSize;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clnDesc;
+        private System.Windows.Forms.Button btnGravar;
+        private System.Windows.Forms.Button btnCancelar;
     }
 }

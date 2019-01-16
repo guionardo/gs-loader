@@ -18,8 +18,6 @@ namespace gs_loader_common.Programs
         private string _md5 = "";
         private long _size = -1;
         private Base.Version _version = null;
-        public string RealFileName => File.Exists(Path.Combine(RealFilePath, FileName)) ? Path.Combine(RealFilePath, FileName) : "";
-        
         /// <summary>
         /// Cria instância de FileEntry a partir de um arquivo real
         /// </summary>
@@ -116,6 +114,7 @@ namespace gs_loader_common.Programs
                 return _filedescription;
             }
         }
+
         /// <summary>
         /// Nome do programa
         /// </summary>
@@ -179,6 +178,7 @@ namespace gs_loader_common.Programs
             }
         }
 
+        public string RealFileName => File.Exists(Path.Combine(RealFilePath, FileName)) ? Path.Combine(RealFilePath, FileName) : "";
         [JsonIgnore]
         public string RealFilePath { get; private set; }
 
@@ -273,6 +273,7 @@ namespace gs_loader_common.Programs
 
         public override int GetHashCode() => (BasePath ?? "" + "\\" + FileName ?? "").ToUpperInvariant().GetHashCode();
 
+        public override string ToString() => Folder + (string.IsNullOrEmpty(Folder) ? "" : "\\") + FileName;
         /// <summary>
         /// Atualiza campos a partir de um arquivo existente
         /// </summary>

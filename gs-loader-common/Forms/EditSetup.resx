@@ -144,10 +144,10 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lbVersion.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>15</value>
   </data>
   <data name="txVersion.Location" type="System.Drawing.Point, System.Drawing">
-    <value>67, 21</value>
+    <value>24, 40</value>
   </data>
   <data name="txVersion.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 20</value>
@@ -165,13 +165,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;txVersion.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>14</value>
   </data>
   <data name="lbMainExecutable.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="lbMainExecutable.Location" type="System.Drawing.Point, System.Drawing">
-    <value>181, 24</value>
+    <value>127, 24</value>
   </data>
   <data name="lbMainExecutable.Size" type="System.Drawing.Size, System.Drawing">
     <value>103, 13</value>
@@ -192,13 +192,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lbMainExecutable.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>13</value>
   </data>
   <data name="txMainExecutable.Location" type="System.Drawing.Point, System.Drawing">
-    <value>291, 21</value>
+    <value>130, 40</value>
   </data>
   <data name="txMainExecutable.Size" type="System.Drawing.Size, System.Drawing">
-    <value>269, 20</value>
+    <value>154, 20</value>
   </data>
   <data name="txMainExecutable.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -213,13 +213,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;txMainExecutable.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>12</value>
   </data>
   <data name="lbArguments.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="lbArguments.Location" type="System.Drawing.Point, System.Drawing">
-    <value>181, 50</value>
+    <value>293, 24</value>
   </data>
   <data name="lbArguments.Size" type="System.Drawing.Size, System.Drawing">
     <value>63, 13</value>
@@ -240,13 +240,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lbArguments.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>11</value>
   </data>
   <data name="txArguments.Location" type="System.Drawing.Point, System.Drawing">
-    <value>250, 47</value>
+    <value>296, 40</value>
   </data>
   <data name="txArguments.Size" type="System.Drawing.Size, System.Drawing">
-    <value>291, 20</value>
+    <value>259, 20</value>
   </data>
   <data name="txArguments.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -261,13 +261,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;txArguments.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>10</value>
   </data>
   <data name="chkJustOneInstance.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="chkJustOneInstance.Location" type="System.Drawing.Point, System.Drawing">
-    <value>184, 73</value>
+    <value>130, 66</value>
   </data>
   <data name="chkJustOneInstance.Size" type="System.Drawing.Size, System.Drawing">
     <value>130, 17</value>
@@ -288,13 +288,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;chkJustOneInstance.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>9</value>
   </data>
   <data name="lbRequirements.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="lbRequirements.Location" type="System.Drawing.Point, System.Drawing">
-    <value>21, 99</value>
+    <value>21, 96</value>
   </data>
   <data name="lbRequirements.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 13</value>
@@ -315,10 +315,10 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lbRequirements.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>8</value>
   </data>
   <data name="txRequirements.Location" type="System.Drawing.Point, System.Drawing">
-    <value>83, 96</value>
+    <value>24, 111</value>
   </data>
   <data name="txRequirements.Size" type="System.Drawing.Size, System.Drawing">
     <value>260, 20</value>
@@ -336,7 +336,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;txRequirements.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>7</value>
   </data>
   <data name="chkUpdTypeOnceADay.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -427,7 +427,7 @@
     <value>2</value>
   </data>
   <data name="gbUpdateType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>24, 175</value>
+    <value>24, 150</value>
   </data>
   <data name="gbUpdateType.Size" type="System.Drawing.Size, System.Drawing">
     <value>182, 117</value>
@@ -448,13 +448,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;gbUpdateType.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>6</value>
   </data>
   <data name="lbRepositoryHost.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="lbRepositoryHost.Location" type="System.Drawing.Point, System.Drawing">
-    <value>21, 136</value>
+    <value>293, 96</value>
   </data>
   <data name="lbRepositoryHost.Size" type="System.Drawing.Size, System.Drawing">
     <value>60, 13</value>
@@ -475,10 +475,10 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lbRepositoryHost.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>5</value>
   </data>
   <data name="txRepositoryHost.Location" type="System.Drawing.Point, System.Drawing">
-    <value>94, 137</value>
+    <value>296, 111</value>
   </data>
   <data name="txRepositoryHost.Size" type="System.Drawing.Size, System.Drawing">
     <value>259, 20</value>
@@ -496,7 +496,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;txRepositoryHost.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>4</value>
   </data>
   <data name="txNotes.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -508,7 +508,7 @@
     <value>True</value>
   </data>
   <data name="txNotes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>194, 98</value>
+    <value>337, 98</value>
   </data>
   <data name="txNotes.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -526,10 +526,10 @@
     <value>0</value>
   </data>
   <data name="gbNotes.Location" type="System.Drawing.Point, System.Drawing">
-    <value>212, 175</value>
+    <value>212, 150</value>
   </data>
   <data name="gbNotes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 117</value>
+    <value>343, 117</value>
   </data>
   <data name="gbNotes.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
@@ -547,7 +547,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;gbNotes.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
   <metadata name="clnFileName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -555,11 +555,26 @@
   <data name="clnFileName.HeaderText" xml:space="preserve">
     <value>Arquivo</value>
   </data>
+  <data name="clnFileName.Width" type="System.Int32, mscorlib">
+    <value>68</value>
+  </data>
+  <metadata name="clnFolder.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="clnFolder.HeaderText" xml:space="preserve">
+    <value>Pasta</value>
+  </data>
+  <data name="clnFolder.Width" type="System.Int32, mscorlib">
+    <value>59</value>
+  </data>
   <metadata name="clnVersion.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="clnVersion.HeaderText" xml:space="preserve">
     <value>Versão</value>
+  </data>
+  <data name="clnVersion.Width" type="System.Int32, mscorlib">
+    <value>65</value>
   </data>
   <metadata name="clnSize.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -567,11 +582,23 @@
   <data name="clnSize.HeaderText" xml:space="preserve">
     <value>Tamanho</value>
   </data>
+  <data name="clnSize.Width" type="System.Int32, mscorlib">
+    <value>77</value>
+  </data>
+  <metadata name="clnDesc.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="clnDesc.HeaderText" xml:space="preserve">
+    <value>Descrição</value>
+  </data>
+  <data name="clnDesc.Width" type="System.Int32, mscorlib">
+    <value>80</value>
+  </data>
   <data name="dgvFiles.Location" type="System.Drawing.Point, System.Drawing">
-    <value>429, 250</value>
+    <value>24, 273</value>
   </data>
   <data name="dgvFiles.Size" type="System.Drawing.Size, System.Drawing">
-    <value>240, 150</value>
+    <value>531, 150</value>
   </data>
   <data name="dgvFiles.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -586,6 +613,54 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;dgvFiles.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="btnGravar.Location" type="System.Drawing.Point, System.Drawing">
+    <value>24, 446</value>
+  </data>
+  <data name="btnGravar.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnGravar.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="btnGravar.Text" xml:space="preserve">
+    <value>Gravar</value>
+  </data>
+  <data name="&gt;&gt;btnGravar.Name" xml:space="preserve">
+    <value>btnGravar</value>
+  </data>
+  <data name="&gt;&gt;btnGravar.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnGravar.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnGravar.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="btnCancelar.Location" type="System.Drawing.Point, System.Drawing">
+    <value>477, 446</value>
+  </data>
+  <data name="btnCancelar.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnCancelar.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
+  </data>
+  <data name="btnCancelar.Text" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="&gt;&gt;btnCancelar.Name" xml:space="preserve">
+    <value>btnCancelar</value>
+  </data>
+  <data name="&gt;&gt;btnCancelar.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnCancelar.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnCancelar.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -595,7 +670,7 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>800, 450</value>
+    <value>571, 481</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Configurações do Programa</value>
@@ -604,6 +679,12 @@
     <value>clnFileName</value>
   </data>
   <data name="&gt;&gt;clnFileName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;clnFolder.Name" xml:space="preserve">
+    <value>clnFolder</value>
+  </data>
+  <data name="&gt;&gt;clnFolder.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;clnVersion.Name" xml:space="preserve">
@@ -616,6 +697,12 @@
     <value>clnSize</value>
   </data>
   <data name="&gt;&gt;clnSize.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;clnDesc.Name" xml:space="preserve">
+    <value>clnDesc</value>
+  </data>
+  <data name="&gt;&gt;clnDesc.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">

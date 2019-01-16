@@ -1,4 +1,5 @@
-﻿using gs_loader_common.Programs;
+﻿using gs_loader_common.Base;
+using gs_loader_common.Programs;
 using gs_loader_common.Update;
 using System;
 using System.Collections.Generic;
@@ -66,12 +67,51 @@ namespace gs_loader_common.Forms
                     e.Value = Program.Files[e.RowIndex].FileName;
                     break;
                 case 1:
-                    e.Value = Program.Files[e.RowIndex].Version.ToString();
+                    e.Value = Program.Files[e.RowIndex].Folder;
                     break;
                 case 2:
+                    e.Value = Program.Files[e.RowIndex].Version.ToString();
+                    break;
+                case 3:
                     e.Value = Program.Files[e.RowIndex].Size;
                     break;
+                case 4:
+                    e.Value = Program.Files[e.RowIndex].Description;
+                    break;
+
+
             }
+        }
+
+        private void GravarPrograma(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txVersion.Text))
+            {
+                Dialog.Error("Versão deve ser informada!");
+                return;
+            }
+
+            Program.Version = txVersion.Text;
+            Program.Arguments = txArguments.Text;
+            Program.JustOneInstance = chkJustOneInstance.Checked;
+            Program.Requirements.Clear();
+            //TODO: Verificar requerimentos válidos
+            var reqs = txRequirements.Text.Split();
+            if (reqs.Length > 0)
+                Program.Requirements.AddRange(reqs);
+
+            Program.UpdateType = (chkUpdTypeAfterRun.Checked ? UpdateType.AfterRun : UpdateType.None) |
+                (chkUpdTypeBeforeRun.Checked ? UpdateType.BeforeRun : UpdateType.None) |
+                (chkUpdTypeOnceADay.Checked ? UpdateType.OnceADay : UpdateType.None);
+
+            //TODO: Validar host do repositório
+            Program.RepositoryHost = txRepositoryHost.Text;
+
+            Program.Notes = txNotes.Text;
+
+            //TODO: Verificar arquivos do programa que não serão incluídos
+
+            DialogResult = DialogResult.OK;
         }
     }
 }

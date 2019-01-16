@@ -88,7 +88,7 @@ namespace gs_loader_common.Programs
         /// <summary>
         /// Versão do programa
         /// </summary>
-        public string Version { get; private set; }
+        public string Version { get; set; }
 
         /// <summary>
         /// Carrega a partir de um arquivo .json
